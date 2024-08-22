@@ -30,10 +30,10 @@ func (U *userImpl) Register(req *model.RegisterReq) (*model.RegisterResp, error)
 	id := uuid.NewString()
 	query := `
 				INSERT INTO users(
-					id, email, password)
+					id, email, password, username)
 				VALUES
-					($1, $2, $3)`
-	_, err := U.DB.Exec(query, id, req.Email, req.Password)
+					($1, $2, $3,$4)`
+	_, err := U.DB.Exec(query, id, req.Email, req.Password, req.Username)
 	if err != nil {
 		log.Println(err)
 		return nil, err

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users(
 	lastname varchar DEFAULT 'lastname',
 	birth_day varchar DEFAULT '2000-01-01',
 	image varchar DEFAULT 'avatar',
-    role role DEFAULT 'user'
+    role role DEFAULT 'user',
 	created_at timestamp DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
 	deleted_at timestamp DEFAULT NULL

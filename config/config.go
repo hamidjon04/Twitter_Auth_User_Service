@@ -25,8 +25,8 @@ type Config struct {
 	Redis_PORT           int
 }
 
-func LoadConfig() Config {
-	if err := godotenv.Load(".env"); err != nil {
+func Load() Config {
+	if err := godotenv.Load("./../../.env"); err != nil {
 		log.Println("error loading .env file or not found", err)
 	}
 
@@ -36,10 +36,10 @@ func LoadConfig() Config {
 	config.USER_ROUTER = cast.ToString(coalesce("USER_ROUTER", ":1596"))
 	config.SIGNING_KEY = cast.ToString(coalesce("SIGNING_KEY", "secret"))
 
-	config.DB_HOST = cast.ToString(coalesce("DB_HOST", "postgresdb"))
+	config.DB_HOST = cast.ToString(coalesce("DB_HOST", "localhost"))
 	config.DB_PORT = cast.ToString(coalesce("DB_PORT", "5432"))
 	config.DB_USER = cast.ToString(coalesce("DB_USER", "postgres"))
-	config.DB_PASSWORD = cast.ToString(coalesce("DB_PASSWORD", "hamidjon4424"))
+	config.DB_PASSWORD = cast.ToString(coalesce("DB_PASSWORD", "your-pasword"))
 	config.DB_NAME = cast.ToString(coalesce("DB_NAME", "your-db-name"))
 
 	config.Redis_HOST = cast.ToString(coalesce("REDIS_HOST", "localhost"))

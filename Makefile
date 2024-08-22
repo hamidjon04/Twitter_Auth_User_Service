@@ -22,4 +22,4 @@ mig-force:
 	$(MIGRATE_CMD) force 1
 
 mig-create:
-	migrate create -ext sql -dir $(MIGRATE_PATH) -seq personal_finance_tracker_table
+	migrate create -ext sql -dir $(MIGRATE_PATH) -seq user_tables
