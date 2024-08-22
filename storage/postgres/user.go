@@ -11,9 +11,9 @@ import (
 type UserRepo interface {
 	Register(req *model.RegisterReq) (*model.RegisterResp, error)
 	GetUserByEmail(email string) (*model.UserInfo, error)
-	SaveRefreshToken(req *model.SaveToken) error 
-	ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error) 
-	ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error) 
+	SaveRefreshToken(req *model.SaveToken) error
+	ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error)
+	ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error)
 }
 
 type userImpl struct {
@@ -63,12 +63,23 @@ func (U *userImpl) GetUserByEmail(email string) (*model.UserInfo, error) {
 }
 
 func (U *userImpl) SaveRefreshToken(req *model.SaveToken) error {
-	query := `	
+	query := `
+		DELETE FROM	
+			refresh_tokens
+		WHERE
+			user_id = $1
+	`
+	_, err := U.DB.Exec(query, req.UserId)
+	if err != nil {
+		return err
+	}
+
+	query = `	
 				INSERT INTO users(
 					user_id, token, expires_at)
 				VALUES
 					($1, $2, $3)`
-	_, err := U.DB.Query(query, req.UserId, req.RefreshToken, req.ExpiresAt)
+	_, err = U.DB.Exec(query, req.UserId, req.RefreshToken, req.ExpiresAt)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -104,3 +115,33 @@ func (U *userImpl) ChangePass(in *model.ChangePassReq) (model.ChangePassResp, er
 	}, nil
 }
 
+func (U *userImpl) InvalidateRefreshToken(userId string) error {
+	_, err := U.DB.Exec(`
+		DELETE FROM
+			refresh_tokens
+		WHERE
+			user_id = $1
+	`, userId)
+
+	return err
+}
+
+func (U *userImpl) IsRefreshTokenValid(user_id string) (bool, error) {
+	var count int
+	err := U.DB.QueryRow(`
+        SELECT 
+            count(*)
+        FROM 
+            refresh_tokens 
+        WHERE 
+            user_id=$1 AND 
+            expires_at > CURRENT_TIMESTAMP
+			
+    `, user_id).Scan(&count)
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
