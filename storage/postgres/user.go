@@ -71,3 +71,32 @@ func (U *userImpl) SaveRefreshToken(req *model.SaveToken) error {
 	}
 	return nil
 }
+
+func (U *userImpl) ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error) {
+	_, err := U.DB.Exec(`
+			UPDATE users
+			SET password = $1
+			WHERE email=$2`, in.Password, in.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.ResetPassResp{
+		Message: "assword reset successfully",
+	}, nil
+}
+
+func (U *userImpl) ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error) {
+	_, err := U.DB.Exec(`
+	    UPDATE users
+		SET password = $1
+		WHERE password = $2`, in.NewPassword, in.NowPassword)
+	if err != nil {
+		return model.ChangePassResp{}, err
+	}
+
+	return model.ChangePassResp{
+		Message: "Password changed successfully",
+	}, nil
+}
+

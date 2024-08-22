@@ -54,6 +54,10 @@ type SaveToken struct {
 	ExpiresAt    string `json:"expires_at"`
 }
 
+type ChangePassResp struct {
+	Message string `json:"message"`
+}
+
 type SuccessResponse struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
