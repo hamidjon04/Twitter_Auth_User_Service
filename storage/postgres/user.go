@@ -14,6 +14,8 @@ type UserRepo interface {
 	SaveRefreshToken(req *model.SaveToken) error
 	ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error)
 	ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error)
+	InvalidateRefreshToken(token string) error
+	IsRefreshTokenValid(token string) (bool, error)
 }
 
 type userImpl struct {
@@ -75,7 +77,7 @@ func (U *userImpl) SaveRefreshToken(req *model.SaveToken) error {
 	}
 
 	query = `	
-				INSERT INTO users(
+				INSERT INTO refresh_tokens(
 					user_id, token, expires_at)
 				VALUES
 					($1, $2, $3)`
@@ -105,9 +107,11 @@ func (U *userImpl) ChangePass(in *model.ChangePassReq) (model.ChangePassResp, er
 	_, err := U.DB.Exec(`
 	    UPDATE users
 		SET password = $1
-		WHERE password = $2`, in.NewPassword, in.NowPassword)
+		WHERE password = $2 and id=$3`, in.NewPassword, in.NowPassword, in.UserId)
 	if err != nil {
-		return model.ChangePassResp{}, err
+		return model.ChangePassResp{
+			Message: "error updating password",
+		}, err
 	}
 
 	return model.ChangePassResp{

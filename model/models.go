@@ -39,6 +39,7 @@ type ResetPassResp struct {
 }
 
 type ChangePassReq struct {
+	UserId string `json:"user_id"`
 	NowPassword string `json:"now_password"`
 	NewPassword string `json:"new_password"`
 }
@@ -60,6 +61,7 @@ type ChangePassResp struct {
 }
 
 type SuccessResponse struct {
+
 	Message string `json:"message"`
 	Success bool   `json:"success"`
 }
