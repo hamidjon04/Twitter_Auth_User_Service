@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func ConnectToDB(cfg *config.Config) (*sql.DB, error) {
+func ConnectToDB(cfg config.Config) (*sql.DB, error) {
 	conn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		cfg.DB_HOST, cfg.DB_PORT, cfg.DB_USER, cfg.DB_PASSWORD, cfg.DB_NAME)
 
