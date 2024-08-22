@@ -10,6 +10,10 @@ import (
 
 type UserRepo interface {
 	Register(req *model.RegisterReq) (*model.RegisterResp, error)
+	GetUserByEmail(email string) (*model.UserInfo, error)
+	SaveRefreshToken(req *model.SaveToken) error 
+	ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error) 
+	ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error) 
 }
 
 type userImpl struct {

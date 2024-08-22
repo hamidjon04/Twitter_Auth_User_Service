@@ -1,4 +1,4 @@
-package reids
+package redisDb
 
 import (
 	"auth/config"
