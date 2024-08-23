@@ -3,19 +3,24 @@ package service
 import (
 	"auth/model"
 	"auth/storage"
+	"context"
 	"fmt"
 	"log/slog"
+	"time"
 )
 
 type AuthenticateService interface {
-	RegisterUser(request *model.RegisterReq) (*model.RegisterResp, error) 
-	LoginUser(request *model.LoginReq) (*model.UserInfo, error) 
+	RegisterUser(request *model.RegisterReq) (*model.RegisterResp, error)
 	ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error)
-	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error) 
-	SaveRefreshToken(request *model.SaveToken) (*model.SuccessResponse, error) 
-	InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error) 
-	IsRefreshTokenValid(tokenString string) (bool, error) 
-	GetUserByEmail(email string)(*model.UserInfo, error)
+	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error)
+	SaveRefreshToken(request *model.SaveToken) (*model.SuccessResponse, error)
+	InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error)
+	IsRefreshTokenValid(tokenString string) (bool, error)
+	GetUserByEmail(email string) (*model.UserInfo, error)
+	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error)
+	IsTokenBlacklisted(ctx context.Context, token string) (bool, error)
+	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error)
+	IsCodeValid(ctx context.Context, email, code string) (bool, error)
 }
 
 type authenticateServiceImpl struct {
@@ -34,16 +39,6 @@ func (s *authenticateServiceImpl) RegisterUser(request *model.RegisterReq) (*mod
 	resp, err := s.storage.UserRepo().Register(request)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error in user register: %v", err))
-		return resp, err
-	}
-
-	return resp, err
-}
-
-func (s *authenticateServiceImpl) LoginUser(request *model.LoginReq) (*model.UserInfo, error) {
-	resp, err := s.storage.UserRepo().GetUserByEmail(request.Email)
-	if err != nil {
-		s.logger.Error(fmt.Sprintf("Error on user login %v", err))
 		return resp, err
 	}
 
@@ -112,11 +107,51 @@ func (s *authenticateServiceImpl) IsRefreshTokenValid(tokenString string) (bool,
 	return isValid, err
 }
 
-func (s *authenticateServiceImpl) GetUserByEmail(email string)(*model.UserInfo, error){
+func (s *authenticateServiceImpl) GetUserByEmail(email string) (*model.UserInfo, error) {
 	resp, err := s.storage.UserRepo().GetUserByEmail(email)
-	if err != nil{
+	if err != nil {
 		s.logger.Error(fmt.Sprintf("Datavazadan ma'lumotlani olishda xatolik: %v", err))
 		return nil, err
 	}
 	return resp, nil
+}
+
+func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error) {
+	resp, err := s.storage.RedisUserRepo().AddTokenBlacklisted(ctx, token, expirationTime)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error tokenni blacklistga solishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
+}
+
+func (s *authenticateServiceImpl) IsTokenBlacklisted(ctx context.Context, token string) (bool, error) {
+	istokenblacklest, err := s.storage.RedisUserRepo().IsTokenBlacklisted(ctx, token)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error token blacklistda borligini tekshirishda: %v", err))
+		return istokenblacklest, err
+	}
+
+	return istokenblacklest, err
+}
+
+func (s *authenticateServiceImpl) StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error) {
+	resp, err := s.storage.RedisUserRepo().StoreCode(ctx, email, code, exprationTime)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error codeni saqlab ketishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
+}
+
+func (s *authenticateServiceImpl) IsCodeValid(ctx context.Context, email, code string) (bool, error) {
+	resp, err := s.storage.RedisUserRepo().IsCodeValid(ctx, email, code)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error codeni tekshirishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
 }
