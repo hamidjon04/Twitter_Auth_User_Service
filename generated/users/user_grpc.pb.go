@@ -27,11 +27,11 @@ type UserServiceClient interface {
 	GetByIdUsers(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
 	AddFollower(ctx context.Context, in *FollowerReq, opts ...grpc.CallOption) (*Massage, error)
 	GetFollowers(ctx context.Context, in *GetFollowersReq, opts ...grpc.CallOption) (*GetaFollowersRes, error)
-	DeleteFollower(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Massage, error)
+	DeleteFollower(ctx context.Context, in *DeleteFollowers, opts ...grpc.CallOption) (*Massage, error)
 	GetByIdFollower(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Followers, error)
 	AddFollowing(ctx context.Context, in *FollowingReq, opts ...grpc.CallOption) (*Massage, error)
 	GetFollowing(ctx context.Context, in *GetFollowingReq, opts ...grpc.CallOption) (*GetaFollowingRes, error)
-	DeleteFollowing(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Massage, error)
+	DeleteFollowing(ctx context.Context, in *DeleteFollowings, opts ...grpc.CallOption) (*Massage, error)
 	GetByIdFollowing(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Following, error)
 }
 
@@ -88,7 +88,7 @@ func (c *userServiceClient) GetFollowers(ctx context.Context, in *GetFollowersRe
 	return out, nil
 }
 
-func (c *userServiceClient) DeleteFollower(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Massage, error) {
+func (c *userServiceClient) DeleteFollower(ctx context.Context, in *DeleteFollowers, opts ...grpc.CallOption) (*Massage, error) {
 	out := new(Massage)
 	err := c.cc.Invoke(ctx, "/users.UserService/DeleteFollower", in, out, opts...)
 	if err != nil {
@@ -124,7 +124,7 @@ func (c *userServiceClient) GetFollowing(ctx context.Context, in *GetFollowingRe
 	return out, nil
 }
 
-func (c *userServiceClient) DeleteFollowing(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Massage, error) {
+func (c *userServiceClient) DeleteFollowing(ctx context.Context, in *DeleteFollowings, opts ...grpc.CallOption) (*Massage, error) {
 	out := new(Massage)
 	err := c.cc.Invoke(ctx, "/users.UserService/DeleteFollowing", in, out, opts...)
 	if err != nil {
@@ -151,11 +151,11 @@ type UserServiceServer interface {
 	GetByIdUsers(context.Context, *Id) (*User, error)
 	AddFollower(context.Context, *FollowerReq) (*Massage, error)
 	GetFollowers(context.Context, *GetFollowersReq) (*GetaFollowersRes, error)
-	DeleteFollower(context.Context, *Id) (*Massage, error)
+	DeleteFollower(context.Context, *DeleteFollowers) (*Massage, error)
 	GetByIdFollower(context.Context, *Id) (*Followers, error)
 	AddFollowing(context.Context, *FollowingReq) (*Massage, error)
 	GetFollowing(context.Context, *GetFollowingReq) (*GetaFollowingRes, error)
-	DeleteFollowing(context.Context, *Id) (*Massage, error)
+	DeleteFollowing(context.Context, *DeleteFollowings) (*Massage, error)
 	GetByIdFollowing(context.Context, *Id) (*Following, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -179,7 +179,7 @@ func (UnimplementedUserServiceServer) AddFollower(context.Context, *FollowerReq)
 func (UnimplementedUserServiceServer) GetFollowers(context.Context, *GetFollowersReq) (*GetaFollowersRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowers not implemented")
 }
-func (UnimplementedUserServiceServer) DeleteFollower(context.Context, *Id) (*Massage, error) {
+func (UnimplementedUserServiceServer) DeleteFollower(context.Context, *DeleteFollowers) (*Massage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFollower not implemented")
 }
 func (UnimplementedUserServiceServer) GetByIdFollower(context.Context, *Id) (*Followers, error) {
@@ -191,7 +191,7 @@ func (UnimplementedUserServiceServer) AddFollowing(context.Context, *FollowingRe
 func (UnimplementedUserServiceServer) GetFollowing(context.Context, *GetFollowingReq) (*GetaFollowingRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowing not implemented")
 }
-func (UnimplementedUserServiceServer) DeleteFollowing(context.Context, *Id) (*Massage, error) {
+func (UnimplementedUserServiceServer) DeleteFollowing(context.Context, *DeleteFollowings) (*Massage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFollowing not implemented")
 }
 func (UnimplementedUserServiceServer) GetByIdFollowing(context.Context, *Id) (*Following, error) {
@@ -301,7 +301,7 @@ func _UserService_GetFollowers_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _UserService_DeleteFollower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(DeleteFollowers)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -313,7 +313,7 @@ func _UserService_DeleteFollower_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: "/users.UserService/DeleteFollower",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).DeleteFollower(ctx, req.(*Id))
+		return srv.(UserServiceServer).DeleteFollower(ctx, req.(*DeleteFollowers))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -373,7 +373,7 @@ func _UserService_GetFollowing_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _UserService_DeleteFollowing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(DeleteFollowings)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -385,7 +385,7 @@ func _UserService_DeleteFollowing_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/users.UserService/DeleteFollowing",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).DeleteFollowing(ctx, req.(*Id))
+		return srv.(UserServiceServer).DeleteFollowing(ctx, req.(*DeleteFollowings))
 	}
 	return interceptor(ctx, in, info, handler)
 }

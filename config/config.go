@@ -25,7 +25,7 @@ type Config struct {
 	Redis_PORT           int
 }
 
-func Load() Config {
+func LoadConfig() Config {
 	if err := godotenv.Load("./../../.env"); err != nil {
 		log.Println("error loading .env file or not found", err)
 	}
