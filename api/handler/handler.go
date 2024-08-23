@@ -1,20 +1,21 @@
 package handler
 
 import (
+	"auth/service"
 	"log/slog"
 )
 
-type MainHandler interface{
-	
+type MainHandler interface {
 }
 
-type handlerImpl struct{
-	Logger *slog.Logger
+type handlerImpl struct {
+	Service service.AuthenticateService
+	Logger  *slog.Logger
 }
 
-func NewMainHandler(logger *slog.Logger)MainHandler{
+func NewMainHandler(service service.AuthenticateService, logger *slog.Logger) MainHandler {
 	return &handlerImpl{
-		Logger: logger,
+		Service: service,
+		Logger:  logger,
 	}
 }
-

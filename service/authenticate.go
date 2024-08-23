@@ -8,6 +8,14 @@ import (
 )
 
 type AuthenticateService interface {
+	RegisterUser(request *model.RegisterReq) (*model.RegisterResp, error) 
+	LoginUser(request *model.LoginReq) (*model.UserInfo, error) 
+	ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error)
+	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error) 
+	SaveRefreshToken(request *model.SaveToken) (*model.SuccessResponse, error) 
+	InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error) 
+	IsRefreshTokenValid(tokenString string) (bool, error) 
+	GetUserByEmail(email string)(*model.UserInfo, error)
 }
 
 type authenticateServiceImpl struct {
@@ -102,4 +110,13 @@ func (s *authenticateServiceImpl) IsRefreshTokenValid(tokenString string) (bool,
 	}
 
 	return isValid, err
+}
+
+func (s *authenticateServiceImpl) GetUserByEmail(email string)(*model.UserInfo, error){
+	resp, err := s.storage.UserRepo().GetUserByEmail(email)
+	if err != nil{
+		s.logger.Error(fmt.Sprintf("Datavazadan ma'lumotlani olishda xatolik: %v", err))
+		return nil, err
+	}
+	return resp, nil
 }

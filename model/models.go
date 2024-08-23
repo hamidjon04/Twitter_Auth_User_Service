@@ -39,7 +39,7 @@ type ResetPassResp struct {
 }
 
 type ChangePassReq struct {
-	UserId string `json:"user_id"`
+	UserId      string `json:"user_id"`
 	NowPassword string `json:"now_password"`
 	NewPassword string `json:"new_password"`
 }
@@ -51,7 +51,7 @@ type UserInfo struct {
 }
 
 type SaveToken struct {
-	UserId           string `json:"user_id"`
+	UserId       string `json:"user_id"`
 	RefreshToken string `json:"refresh_token"`
 	ExpiresAt    string `json:"expires_at"`
 }
@@ -61,7 +61,11 @@ type ChangePassResp struct {
 }
 
 type SuccessResponse struct {
-
 	Message string `json:"message"`
 	Success bool   `json:"success"`
+}
+
+type Error struct {
+	Error   string `json:"error"`
+	Message string `json:"message"`
 }
