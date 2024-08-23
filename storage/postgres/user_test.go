@@ -49,7 +49,7 @@ func TestSaveRefreshToken(t *testing.T) {
 	}
 
 	repo := NewUserRepo(db)
-	token := model.SaveToken{UserId: "43f1f0e7-ec9f-43d6-a42c-97145103e6ef", RefreshToken: "abc", ExpiresAt: "2022-12-31 23:59:59"}
+	token := model.SaveToken{UserId: "43f1f0e7-ec9f-43d6-a42c-97145103e6ef", RefreshToken: "abc", ExpiresAt: 1000000}
 	err = repo.SaveRefreshToken(&token)
 	if err != nil {
 		t.Fatal(err)

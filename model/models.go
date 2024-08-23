@@ -53,7 +53,7 @@ type UserInfo struct {
 type SaveToken struct {
 	UserId       string `json:"user_id"`
 	RefreshToken string `json:"refresh_token"`
-	ExpiresAt    string `json:"expires_at"`
+	ExpiresAt    int64  `json:"expires_at"`
 }
 
 type ChangePassResp struct {

@@ -13,7 +13,7 @@ type AuthenticateService interface {
 	RegisterUser(request *model.RegisterReq) (*model.RegisterResp, error)
 	ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error)
 	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error)
-	SaveRefreshToken(request *model.SaveToken) (*model.SuccessResponse, error)
+	SaveRefreshToken(request *model.SaveToken) (error)
 	InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error)
 	IsRefreshTokenValid(tokenString string) (bool, error)
 	GetUserByEmail(email string) (*model.UserInfo, error)
@@ -65,20 +65,12 @@ func (s *authenticateServiceImpl) ChangePassword(request *model.ChangePassReq) (
 	return &resp, err
 }
 
-func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) (*model.SuccessResponse, error) {
+func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) (error) {
 	err := s.storage.UserRepo().SaveRefreshToken(request)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error on token save for user: %v", err))
-		return &model.SuccessResponse{
-			Success: false,
-			Message: err.Error(),
-		}, err
 	}
-
-	return &model.SuccessResponse{
-		Success: true,
-		Message: "token saved for user successfully",
-	}, err
+	return err
 }
 
 func (s *authenticateServiceImpl) InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error) {
