@@ -18,6 +18,9 @@ type UserRepo interface {
 	ChangePass(in *model.ChangePassReq) (model.ChangePassResp, error)
 	InvalidateRefreshToken(token string) error
 	IsRefreshTokenValid(token string) (bool, error)
+	GetUser(in *pb.GetUserReq) (*pb.GetUserRes, error)
+	DeleteUsers(in *pb.Id) (*pb.Massage, error)
+	GetByIdUsers(in *pb.Id) (*pb.User, error)
 }
 
 type userImpl struct {

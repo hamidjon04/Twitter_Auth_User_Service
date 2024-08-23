@@ -16,7 +16,7 @@ import (
 
 func main() {
 	logger := logs.InitLogger()
-	cfg := config.Load()
+	cfg := config.LoadConfig()
 
 	db, err := postgres.ConnectToDB(cfg)
 	if err != nil {

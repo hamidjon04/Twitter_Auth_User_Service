@@ -11,6 +11,7 @@ import (
 type IStorage interface {
 	UserRepo()postgres.UserRepo
 	RedisUserRepo() redisDb.RedisStore
+	FollowRepository() postgres.FollowRepository
 }
 
 type storageImpl struct {
@@ -28,4 +29,8 @@ func(u *storageImpl) UserRepo()postgres.UserRepo{
 
 func(u *storageImpl) RedisUserRepo() redisDb.RedisStore{
 	return redisDb.NewRedisStore(u.redis)
+}
+
+func (u *storageImpl) FollowRepository() postgres.FollowRepository {
+	return postgres.NewFollowRepository(u.postgres)
 }
