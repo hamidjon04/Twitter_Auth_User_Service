@@ -1,9 +1,11 @@
 package postgres
 
 import (
+	pb "auth/generated/users"
 	"auth/model"
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -148,4 +150,93 @@ func (U *userImpl) IsRefreshTokenValid(user_id string) (bool, error) {
 	}
 
 	return count > 0, nil
+}
+
+func (u *userImpl) GetUser(in *pb.GetUserReq) (*pb.GetUserRes, error) {
+	rows, err := u.DB.Query(`
+	    SELECT 
+			id, 
+			email, 
+			username,
+			name,
+			password,
+			lastname,
+            birth_day,
+            image,
+            created_at,
+            updated_at
+		FROM users 
+		WHERE deleted_at IS NULL
+			limit=$1 offset=$2
+			`)
+
+	if err != nil {
+		return nil, err
+	}
+	var users []*pb.User
+	for rows.Next() {
+		var user pb.User
+		err := rows.Scan(
+			&user.Id,
+			&user.Email,
+			&user.Username,
+			&user.Name,
+			&user.Password,
+			&user.Lastname,
+			&user.BirthDay,
+			&user.Image,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, &user)
+	}
+	return &pb.GetUserRes{Users: users}, nil
+}
+
+func (u *userImpl) DeleteUsers(in *pb.Id) (*pb.Massage, error) {
+	deleted_at := time.Now().Format("2006/01/02")
+	_, err := u.DB.Exec(`UPDATE users SET deleted_at=$1 WHERE id=$2 and deleted_at IS NULL`, deleted_at, in.Id)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.Massage{Message: "User deleted successfully"}, nil
+}
+
+func (u *userImpl) GetByIdUsers(in *pb.Id) (*pb.User, error) {
+	var user pb.User
+	err := u.DB.QueryRow(`
+        SELECT 
+            id, 
+            email, 
+            username,
+            name,
+            password,
+            lastname,
+            birth_day,
+            image,
+            created_at,
+            updated_at
+        FROM users 
+		WHERE id=$1 AND 
+			deleted_at IS NULL
+            `, in.Id).Scan(
+		&user.Id,
+		&user.Email,
+		&user.Username,
+		&user.Name,
+		&user.Password,
+		&user.Lastname,
+		&user.BirthDay,
+		&user.Image,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
