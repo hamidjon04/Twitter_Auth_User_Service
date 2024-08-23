@@ -3,8 +3,10 @@ package service
 import (
 	"auth/model"
 	"auth/storage"
+	"context"
 	"fmt"
 	"log/slog"
+	"time"
 )
 
 type AuthenticateService interface {
@@ -102,4 +104,44 @@ func (s *authenticateServiceImpl) IsRefreshTokenValid(tokenString string) (bool,
 	}
 
 	return isValid, err
+}
+
+func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error) {
+	resp, err := s.storage.RedisUserRepo().AddTokenBlacklisted(ctx, token, expirationTime)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error tokenni blacklistga solishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
+}
+
+func (s *authenticateServiceImpl) IsTokenBlacklisted(ctx context.Context, token string) (bool, error) {
+	istokenblacklest, err := s.storage.RedisUserRepo().IsTokenBlacklisted(ctx, token)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error token blacklistda borligini tekshirishda: %v", err))
+		return istokenblacklest, err
+	}
+
+	return istokenblacklest, err
+}
+
+func (s *authenticateServiceImpl) StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error) {
+	resp, err := s.storage.RedisUserRepo().StoreCode(ctx, email, code, exprationTime)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error codeni saqlab ketishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
+}
+
+func (s *authenticateServiceImpl) IsCodeValid(ctx context.Context, email, code string) (bool, error) {
+	resp, err := s.storage.RedisUserRepo().IsCodeValid(ctx, email, code)
+	if err != nil {
+		s.logger.Error(fmt.Sprintf("Error codeni tekshirishda: %v", err))
+		return resp, err
+	}
+
+	return resp, err
 }
