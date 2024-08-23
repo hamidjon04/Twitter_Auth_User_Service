@@ -2,7 +2,7 @@ package storage
 
 import (
 	"auth/storage/postgres"
-	redisDb "auth/storage/reids"
+	redisDb "auth/storage/redis"
 	"database/sql"
 
 	"github.com/redis/go-redis/v9"

@@ -6,20 +6,18 @@ import (
 	"log/slog"
 )
 
-
-type MainService interface{
-
+type MainService interface {
 }
 
-type Service struct{
+type Service struct {
 	pb.UnimplementedUserServiceServer
-	Storage *storage.IStorage
-	Logger *slog.Logger
+	Storage storage.IStorage
+	Logger  *slog.Logger
 }
 
-func NewService(storage *storage.IStorage, logger *slog.Logger)*Service{
+func NewService(storage storage.IStorage, logger *slog.Logger) *Service {
 	return &Service{
 		Storage: storage,
-		Logger: logger,
+		Logger:  logger,
 	}
 }

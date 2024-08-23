@@ -7,7 +7,7 @@ import (
 	"auth/service"
 	"auth/storage"
 	"auth/storage/postgres"
-	redisDb "auth/storage/reids"
+	redisDb "auth/storage/redis"
 	"log"
 	"net"
 
@@ -16,7 +16,7 @@ import (
 
 func main() {
 	logger := logs.InitLogger()
-	cfg := config.LoadConfig()
+	cfg := config.Load()
 
 	db, err := postgres.ConnectToDB(cfg)
 	if err != nil {
@@ -39,7 +39,7 @@ func main() {
 	}
 	defer listener.Close()
 
-	service := service.NewService(&storage, logger)
+	service := service.NewService(storage, logger)
 	s := grpc.NewServer()
 	users.RegisterUserServiceServer(s, service)
 
