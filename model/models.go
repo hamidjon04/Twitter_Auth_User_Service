@@ -30,7 +30,7 @@ type LogoutResp struct {
 }
 
 type ResetPassReq struct {
-	Email    string `json:"email"`
+	Id string `json:"id"`
 	Password string `json:"password"`
 }
 
@@ -67,5 +67,13 @@ type SuccessResponse struct {
 
 type Error struct {
 	Error   string `json:"error"`
+	Message string `json:"message"`
+}
+
+type ForgotPassReq struct{
+	Email string `json:"email"`
+}
+
+type ForgotPassResp struct{
 	Message string `json:"message"`
 }

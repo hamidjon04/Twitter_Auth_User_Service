@@ -12,14 +12,13 @@ type MainService interface {
 	GetUsers(context.Context, *pb.GetUserReq) (*pb.GetUserRes, error)
 	DeleteUsers(context.Context, *pb.Id) (*pb.Massage, error)
 	GetByIdUsers(context.Context, *pb.Id) (*pb.User, error)
-	AddFollower(context.Context, *pb.FollowerReq) (*pb.Massage, error)
+	Subscribe(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error)
 	GetFollowers(context.Context, *pb.GetFollowersReq) (*pb.GetaFollowersRes, error)
-	DeleteFollower(context.Context, *pb.DeleteFollowers) (*pb.Massage, error)
-	GetByIdFollower(context.Context, *pb.Id) (*pb.Followers, error)
-	AddFollowing(context.Context, *pb.FollowingReq) (*pb.Massage, error)
+	DeleteFollower(context.Context, *pb.DeleteFollowerReq) (*pb.Massage, error)
+	GetByIdFollower(context.Context, *pb.DeleteFollowerReq) (*pb.Follow, error)
 	GetFollowing(context.Context, *pb.GetFollowingReq) (*pb.GetaFollowingRes, error)
-	DeleteFollowing(context.Context, *pb.DeleteFollowings) (*pb.Massage, error)
-	GetByIdFollowing(context.Context, *pb.Id) (*pb.Following, error)
+	DeleteFollowing(context.Context, *pb.DeleteFollowerReq) (*pb.Massage, error)
+	GetByIdFollowing(context.Context, *pb.DeleteFollowerReq) (*pb.Follow, error)
 }
 
 type Service struct {
@@ -64,17 +63,6 @@ func (s *Service) GetByIdUsers(ctx context.Context, req *pb.Id) (*pb.User, error
 	return resp, nil
 }
 
-
-func (s *Service) AddFollower(ctx context.Context, req *pb.FollowerReq) (*pb.Massage, error) {
-	resp, err := s.Storage.FollowRepository().AddFollower(req)
-	if err != nil {
-		s.Logger.Error(fmt.Sprintf("Xatolik user follower bo'lishda: %v", err))
-		return resp, err
-	}
-
-	return resp, err
-}
-
 func (s *Service) GetFollowers(ctx context.Context, req *pb.GetFollowersReq) (*pb.GetaFollowersRes, error) {
 	resp, err := s.Storage.FollowRepository().GetFollowers(req)
 	if err != nil {
@@ -85,7 +73,7 @@ func (s *Service) GetFollowers(ctx context.Context, req *pb.GetFollowersReq) (*p
 	return resp, err
 }
 
-func (s *Service) DeleteFollower(ctx context.Context, req *pb.DeleteFollowers) (*pb.Massage, error) {
+func (s *Service) DeleteFollower(ctx context.Context, req *pb.DeleteFollowerReq) (*pb.Massage, error) {
 	resp, err := s.Storage.FollowRepository().DeleteFollower(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error follower ochirishda: %v", err))
@@ -95,7 +83,7 @@ func (s *Service) DeleteFollower(ctx context.Context, req *pb.DeleteFollowers) (
 	return resp, err
 }
 
-func (s *Service) GetByIdFollower(ctx context.Context, req *pb.Id) (*pb.Followers, error) {
+func (s *Service) GetByIdFollower(ctx context.Context, req *pb.DeleteFollowerReq) (*pb.Follow, error) {
 	resp, err := s.Storage.FollowRepository().GetByIdFollowers(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error followerni idsi bo'yicha olishda: %v", err))
@@ -105,8 +93,8 @@ func (s *Service) GetByIdFollower(ctx context.Context, req *pb.Id) (*pb.Follower
 	return resp, nil
 }
 
-func (s *Service) AddFollowing(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error) {
-	resp, err := s.Storage.FollowRepository().AddFollowing(req)
+func (s *Service) Subscribe(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error) {
+	resp, err := s.Storage.FollowRepository().Subscribe(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error following bo'lishda: %v", err))
 		return resp, err
@@ -126,7 +114,7 @@ func (s *Service) GetFollowing(ctx context.Context, req *pb.GetFollowingReq) (*p
 }
 
 
-func (s *Service) DeleteFollowing(ctx context.Context, req *pb.DeleteFollowings) (*pb.Massage, error) {
+func (s *Service) DeleteFollowing(ctx context.Context, req *pb.DeleteFollowerReq) (*pb.Massage, error) {
 	resp, err := s.Storage.FollowRepository().DeleteFollowing(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error followingni o'chirishda: %v", err))
@@ -136,7 +124,7 @@ func (s *Service) DeleteFollowing(ctx context.Context, req *pb.DeleteFollowings)
 	return resp, err
 }
 
-func (s *Service) GetByIdFollowing(ctx context.Context, req *pb.Id) (*pb.Following, error) {
+func (s *Service) GetByIdFollowing(ctx context.Context, req *pb.DeleteFollowerReq) (*pb.Follow, error) {
 	resp, err := s.Storage.FollowRepository().GetByIdFollowing(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error followingni id boyicha olishda: %v", err))
@@ -145,3 +133,4 @@ func (s *Service) GetByIdFollowing(ctx context.Context, req *pb.Id) (*pb.Followi
 
 	return resp, err
 }
+

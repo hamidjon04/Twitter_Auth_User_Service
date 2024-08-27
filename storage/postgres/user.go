@@ -96,15 +96,16 @@ func (U *userImpl) SaveRefreshToken(req *model.SaveToken) error {
 
 func (U *userImpl) ResetPass(in *model.ResetPassReq) (*model.ResetPassResp, error) {
 	_, err := U.DB.Exec(`
-			UPDATE users
-			SET password = $1
-			WHERE email=$2`, in.Password, in.Email)
+			UPDATE users SET 
+				password = $1
+			WHERE 
+				id = $2`, in.Password, in.Id)
 	if err != nil {
 		return nil, err
 	}
 
 	return &model.ResetPassResp{
-		Message: "assword reset successfully",
+		Message: "Password reset successfully",
 	}, nil
 }
 
@@ -212,34 +213,19 @@ func (u *userImpl) GetByIdUsers(in *pb.Id) (*pb.User, error) {
 	var user pb.User
 	err := u.DB.QueryRow(`
         SELECT 
-            id, 
-            email, 
-            username,
-            name,
-            password,
-            lastname,
-            birth_day,
-            image,
-            created_at,
-            updated_at
-        FROM users 
-		WHERE id=$1 AND 
-			deleted_at IS NULL
-            `, in.Id).Scan(
-		&user.Id,
-		&user.Email,
-		&user.Username,
-		&user.Name,
-		&user.Password,
-		&user.Lastname,
-		&user.BirthDay,
-		&user.Image,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	)
-
+            id, email, username, name, password, lastname, birth_day, image, created_at, updated_at
+        FROM 
+			users 
+		WHERE 
+			id=$1 AND deleted_at IS NULL`, in.Id).
+		Scan(&user.Id, &user.Email, &user.Username, &user.Name, &user.Password, &user.Lastname, &user.BirthDay, &user.Image, &user.CreatedAt, &user.UpdatedAt,)
 	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
+
+func(u *userImpl) ForgotPassword(req *model.ForgotPassReq)(*model.ForgotPassResp, error){
+
+}
+

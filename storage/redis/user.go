@@ -9,7 +9,7 @@ import (
 )
 
 type RedisStore interface {
-	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error)
+	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error)
 	IsTokenBlacklisted(ctx context.Context, token string) (bool, error)
 	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error)
 	IsCodeValid(ctx context.Context, email, code string) (bool, error)
@@ -25,19 +25,13 @@ func NewRedisStore(client *redis.Client) RedisStore {
 	}
 }
 
-func (rdb *redisStoreImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error) {
+func (rdb *redisStoreImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error) {
 	err := rdb.client.Set(ctx, token, "blacklisted", expirationTime).Err()
 	if err != nil {
-		return &model.SuccessResponse{
-			Message: err.Error(),
-			Success: false,
-		}, nil
+		return err
 	}
 
-	return &model.SuccessResponse{
-		Message: "Token added to blacklist successfully",
-		Success: true,
-	}, nil
+	return nil
 }
 
 func (rdb *redisStoreImpl) IsTokenBlacklisted(ctx context.Context, token string) (bool, error) {

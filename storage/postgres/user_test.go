@@ -66,7 +66,7 @@ func TestResetPass(t *testing.T) {
 	}
 
 	repo := NewUserRepo(db)
-	user := model.ResetPassReq{Email: "test@test.com", Password: "123456"}
+	user := model.ResetPassReq{Id: "test@test.com", Password: "123456"}
 	_, err = repo.ResetPass(&user)
 	if err != nil {
 		t.Fatal(err)

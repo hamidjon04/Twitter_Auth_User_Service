@@ -3,17 +3,20 @@ package postgres
 import (
 	pb "auth/generated/users"
 	"database/sql"
+	"log"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type FollowRepository interface {
-	AddFollower(in *pb.FollowerReq) (*pb.Massage, error)
-	DeleteFollower(in *pb.DeleteFollowers) (*pb.Massage, error)
+	DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, error)
 	GetFollowers(in *pb.GetFollowersReq) (*pb.GetaFollowersRes, error)
-	GetByIdFollowers(in *pb.Id) (*pb.Followers, error)
+	GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, error)
 	GetFollowing(in *pb.GetFollowingReq) (*pb.GetaFollowingRes, error)
-	GetByIdFollowing(in *pb.Id) (*pb.Following, error)
-	AddFollowing(in *pb.FollowingReq) (*pb.Massage, error)
-	DeleteFollowing(in *pb.DeleteFollowings) (*pb.Massage, error)
+	GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, error)
+	Subscribe(in *pb.FollowingReq) (*pb.Massage, error)
+	DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, error)
 }
 
 type followRepo struct {
@@ -24,81 +27,96 @@ func NewFollowRepository(db *sql.DB) FollowRepository {
 	return &followRepo{DB: db}
 }
 
-func (f *followRepo) AddFollower(in *pb.FollowerReq) (*pb.Massage, error) {
-	_, err := f.DB.Exec(`
-        INSERT INTO 
-		user_followers(
-            user_id, 
-			follower_id
-        )VALUES(
-            $1, 
-			$2
-        )
-    `, in.UserId, in.FollowerId)
-
-	if err != nil {
+func (f *followRepo) DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, error) {
+	tr, err := f.DB.Begin()
+	if err != nil{
+		log.Println(err)
 		return nil, err
 	}
-
-	return &pb.Massage{Message: "Follower added successfully"}, nil
+	query := `
+				UPDATE user_followers SET
+					deleted_at = $1
+				WHERE 
+					user_id = $2 AND follower_id = $3 AND deleted_at is null`
+	_, err = tr.Exec(query, time.Now(), in.UserId, in.FollowerId)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return &pb.Massage{
+			Message: "Error",
+		}, err
+	}
+	query = `
+				UPDATE user_following SET
+					deleted_at = $1
+				WHERE 
+					user_id = $2 AND following_id = $3 AND deleted_at is null`
+	_, err = tr.Exec(query, time.Now(), in.FollowerId, in.UserId)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return &pb.Massage{
+			Message: "error",
+		}, err
+	}
+	tr.Commit()
+	return &pb.Massage{
+		Message: "Success",
+	}, nil
 }
 
-func (f *followRepo) DeleteFollower(in *pb.DeleteFollowers) (*pb.Massage, error) {
-	_, err := f.DB.Exec(`
-        UPDATE
-        	user_followers
-		SET
-			deleted_at = now()
-        WHERE 
-            user_id = $1 AND follower_id = $2 AND deleted_at IS NULL
-    `, in.UserId, in.FollowerId)
-
-	if err != nil {
+func (f *followRepo) GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, error) {
+	tr, err := f.DB.Begin()
+	if err != nil{
+		log.Println(err)
 		return nil, err
 	}
-
-	return &pb.Massage{Message: "Follower deleted successfully"}, nil
-}
-
-func (f *followRepo) GetByIdFollowers(in *pb.Id) (*pb.Followers, error) {
-	var follower pb.Followers
-	err := f.DB.QueryRow(`
-        SELECT 
-            id, 
-            user_id, 
-            follower_id,
-            created_at,
-            updated_at
-        FROM 
-            user_followers
-        WHERE 
-            id = $1 AND deleted_at IS NULL
-    `, in.Id).Scan(&follower.Id, &follower.UserId, &follower.FollowerId, &follower.CreatedAt, &follower.UpdatedAt)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
-
-	if err != nil {
+	
+	query := `
+				SELECT 
+					id
+				FROM
+					user_followers
+				WHERE
+					user_id = $1 AND follower_id = $2`
+	var id string
+	err = tr.QueryRow(query, in.UserId, in.FollowerId).Scan(&id)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return nil, err
+	} else if id == ""{
+		log.Println("Followerlar orasida bunday follower mavjud emas")
+		tr.Rollback()
 		return nil, err
 	}
-
-	return &follower, nil
+	query = `
+				SELECT 
+					username, email, name, lastname, birth_day, image
+				FROM
+					Users
+				WHERE 
+					id = $1`
+	var resp = pb.Follow{Id: in.FollowerId}
+	err = tr.QueryRow(query, in.FollowerId).Scan(&resp.Username, &resp.Email, &resp.Name, &resp.Lastname, &resp.BirthDay, &resp.Image)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return nil, err
+	}
+	tr.Commit()
+	return &resp, nil
 }
 
 func (f *followRepo) GetFollowers(in *pb.GetFollowersReq) (*pb.GetaFollowersRes, error) {
 	rows, err := f.DB.Query(`
         SELECT 
-            id, 
-            user_id, 
-            follower_id,
-            created_at,
-            updated_at
+    		id, user_id, follower_id,created_at, updated_at
         FROM 
             user_followers
         WHERE 
-            deleted_at IS NULL limit $1 offset $2
-    `, in.Limit, in.Page)
+            user_id = $1 AND deleted_at IS NULL limit $1 offset $2
+    `, in.Id, in.Limit, in.Page)
 
 	if err != nil {
 		return nil, err
@@ -122,79 +140,137 @@ func (f *followRepo) GetFollowers(in *pb.GetFollowersReq) (*pb.GetaFollowersRes,
 	return &pb.GetaFollowersRes{Followers: followers}, nil
 }
 
-func (f *followRepo) AddFollowing(in *pb.FollowingReq) (*pb.Massage, error) {
-	_, err := f.DB.Exec(`
-        INSERT INTO 
-        user_following(
-            user_id, 
-            following_id
-            ) VALUES(
-            $1, 
-            $2
-        )`, in.UserId, in.FollowingId)
-
+func (f *followRepo) Subscribe(in *pb.FollowingReq) (*pb.Massage, error) {
+	tranzaction, err := f.DB.Begin()
 	if err != nil {
+		log.Println(err)
+		tranzaction.Rollback()
 		return nil, err
 	}
-
-	return &pb.Massage{Message: "Following added successfully"}, nil
+	id1 := uuid.NewString()
+	query1 := `
+				INSERT INTO user_following(
+					id, user_id, following_id)
+				VALUES
+					($1, $2, $3)`
+	_, err = tranzaction.Exec(query1, id1, in.UserId, in.FollowingId)
+	if err != nil {
+		log.Println(err)
+		tranzaction.Rollback()
+		return nil, err
+	}
+	id2 := uuid.NewString()
+	query2 := `
+				INSERT INTO user_followers(
+					id, user_id, follower_id)
+				VALUES
+					($1, $2, $3)`
+	_, err = tranzaction.Exec(query2, id2, in.FollowingId, in.UserId)
+	if err != nil {
+		log.Println(err)
+		tranzaction.Rollback()
+		return nil, err
+	}
+	err = tranzaction.Commit()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return &pb.Massage{
+		Message: "Succes",
+	}, nil
 }
 
-func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowings) (*pb.Massage, error) {
-	_, err := f.DB.Exec(`
-        UPDATE
-            user_following
-        SET
-            deleted_at = now()
-        WHERE user_id=$1 AND following_id=$2 AND deleted_at IS NULL`, in.UserId, in.FollowingId)
-
-	if err != nil {
+func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, error) {
+	tr, err := f.DB.Begin()
+	if err != nil{
+		log.Println(err)
 		return nil, err
-
 	}
-
-	return &pb.Massage{Message: "Following deleted successfully"}, nil
+	query := `
+				UPDATE user_followers SET
+					deleted_at = $1
+				WHERE 
+					user_id = $2 AND follower_id = $3 AND deleted_at is null`
+	_, err = tr.Exec(query, time.Now(), in.FollowerId, in.UserId)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return &pb.Massage{
+			Message: "Error",
+		}, err
+	}
+	query = `
+				UPDATE user_following SET
+					deleted_at = $1
+				WHERE 
+					user_id = $2 AND following_id = $3 AND deleted_at is null`
+	_, err = tr.Exec(query, time.Now(), in.UserId, in.FollowerId)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return &pb.Massage{
+			Message: "error",
+		}, err
+	}
+	tr.Commit()
+	return &pb.Massage{
+		Message: "Success",
+	}, nil
 }
 
-func (f *followRepo) GetByIdFollowing(in *pb.Id) (*pb.Following, error) {
-	var following pb.Following
-	err := f.DB.QueryRow(`
-        SELECT 
-            id, 
-            user_id, 
-            follower_id,
-            created_at,
-            updated_at
-        FROM 
-            user_following
-        WHERE 
-            id = $1 AND deleted_at IS NULL
-    `, in.Id).Scan(&following.Id, &following.UserId, &following.FollowingId, &following.CreatedAt, &following.UpdatedAt)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
-
-	if err != nil {
+func (f *followRepo) GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, error) {
+	tr, err := f.DB.Begin()
+	if err != nil{
+		log.Println(err)
 		return nil, err
 	}
-
-	return &following, nil
+	
+	query := `
+				SELECT 
+					id
+				FROM
+					user_following
+				WHERE
+					user_id = $1 AND following_id = $2`
+	var id string
+	err = tr.QueryRow(query, in.UserId, in.FollowerId).Scan(&id)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return nil, err
+	} else if id == ""{
+		log.Println("Followerlar orasida bunday follower mavjud emas")
+		tr.Rollback()
+		return nil, err
+	}
+	query = `
+				SELECT 
+					username, email, name, lastname, birth_day, image
+				FROM
+					Users
+				WHERE 
+					id = $1`
+	var resp = pb.Follow{Id: in.FollowerId}
+	err = tr.QueryRow(query, in.FollowerId).Scan(&resp.Username, &resp.Email, &resp.Name, &resp.Lastname, &resp.BirthDay, &resp.Image)
+	if err != nil{
+		log.Println(err)
+		tr.Rollback()
+		return nil, err
+	}
+	tr.Commit()
+	return &resp, nil
 }
 
 func (f *followRepo) GetFollowing(in *pb.GetFollowingReq) (*pb.GetaFollowingRes, error) {
 	rows, err := f.DB.Query(`
         SELECT 
-            id, 
-            user_id, 
-            follower_id,
-            created_at,
-            updated_at
+    		id, user_id, follower_id, created_at, updated_at
         FROM 
             user_following
         WHERE 
-            deleted_at IS NULL limit $1 offset $2
-    `, in.Limit, in.Page)
+            user_id = $1 AND deleted_at IS NULL limit $1 offset $2
+    `, in.Id, in.Limit, in.Page)
 
 	if err != nil {
 		return nil, err

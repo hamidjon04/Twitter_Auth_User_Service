@@ -14,10 +14,10 @@ type AuthenticateService interface {
 	ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error)
 	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error)
 	SaveRefreshToken(request *model.SaveToken) (error)
-	InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error)
+	InvalidateRefreshToken(userId string) (error)
 	IsRefreshTokenValid(tokenString string) (bool, error)
 	GetUserByEmail(email string) (*model.UserInfo, error)
-	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error)
+	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error)
 	IsTokenBlacklisted(ctx context.Context, token string) (bool, error)
 	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error)
 	IsCodeValid(ctx context.Context, email, code string) (bool, error)
@@ -73,20 +73,14 @@ func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) (er
 	return err
 }
 
-func (s *authenticateServiceImpl) InvalidateRefreshToken(tokenString string) (*model.SuccessResponse, error) {
-	err := s.storage.UserRepo().InvalidateRefreshToken(tokenString)
+func (s *authenticateServiceImpl) InvalidateRefreshToken(userID string) (error) {
+	err := s.storage.UserRepo().InvalidateRefreshToken(userID)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error on token invalidation for the user: %v", err))
-		return &model.SuccessResponse{
-			Message: err.Error(),
-			Success: false,
-		}, err
+		return err
 	}
 
-	return &model.SuccessResponse{
-		Success: true,
-		Message: "Token invalidate for the user successfully",
-	}, err
+	return nil
 }
 
 func (s *authenticateServiceImpl) IsRefreshTokenValid(tokenString string) (bool, error) {
@@ -108,14 +102,13 @@ func (s *authenticateServiceImpl) GetUserByEmail(email string) (*model.UserInfo,
 	return resp, nil
 }
 
-func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (*model.SuccessResponse, error) {
-	resp, err := s.storage.RedisUserRepo().AddTokenBlacklisted(ctx, token, expirationTime)
+func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error) {
+	err := s.storage.RedisUserRepo().AddTokenBlacklisted(ctx, token, expirationTime)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error tokenni blacklistga solishda: %v", err))
-		return resp, err
+		return err
 	}
-
-	return resp, err
+	return err
 }
 
 func (s *authenticateServiceImpl) IsTokenBlacklisted(ctx context.Context, token string) (bool, error) {
@@ -147,3 +140,5 @@ func (s *authenticateServiceImpl) IsCodeValid(ctx context.Context, email, code s
 
 	return resp, err
 }
+
+
