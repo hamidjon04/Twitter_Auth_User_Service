@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth/api"
 	"auth/config"
 	"auth/generated/users"
 	logs "auth/pkg"
@@ -11,6 +12,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
 
@@ -39,9 +41,16 @@ func main() {
 	}
 	defer listener.Close()
 
-	service := service.NewService(storage, logger)
+	u := service.NewAuthenticateService(storage, logger)
+	serv := service.NewService(storage, logger)
 	s := grpc.NewServer()
-	users.RegisterUserServiceServer(s, service)
+	users.RegisterUserServiceServer(s, serv)
+
+	go func ()  {
+		controller := api.NewController(gin.Default(), logger)
+		controller.StartRouter(cfg)	
+		controller.SetUpRouter(u, *serv)
+	}()
 
 	log.Printf("Service is run: %v", cfg.USER_SERVICE)
 	if err = s.Serve(listener); err != nil {
