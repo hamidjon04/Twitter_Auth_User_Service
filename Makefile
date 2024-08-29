@@ -23,3 +23,6 @@ mig-force:
 
 mig-create:
 	migrate create -ext sql -dir $(MIGRATE_PATH) -seq user_tables
+
+swag-gen:
+	~/go/bin/swag init -g ./api/router.go -o api/docs

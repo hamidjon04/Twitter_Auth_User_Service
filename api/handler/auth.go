@@ -12,6 +12,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// @Summary      Foydalanuvchini ro'yxatdan o'tkazish
+// @Description  Ushbu endpoint foydalanuvchini ro'yxatdan o'tkazadi. Email va parol bilan ma'lumotlarni yuboring.
+// @Tags         Authentication
+// @Accept       json
+// @Produce      json
+// @Param        request  body  model.RegisterReq  true  "Ro'yxatdan o'tish ma'lumotlari"
+// @Success      200  {object}  model.RegisterResp  "Foydalanuvchi muvaffaqiyatli ro'yxatdan o'tkazildi"
+// @Failure      400  {object}  model.Error        "Xatolik yuz berdi"
+// @Failure      500  {object}  model.Error        "Server xatosi"
+// @Router       /auth/register [post]
 func (h *handlerImpl) Register(c *gin.Context) {
 	req := model.RegisterReq{}
 	err := c.ShouldBindJSON(&req)
@@ -55,6 +65,16 @@ func (h *handlerImpl) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchi tizimga kirishi
+// @Description  Ushbu endpoint foydalanuvchining email va parolini tekshiradi va access hamda refresh tokenlarini qaytaradi.
+// @Tags         Authentication
+// @Accept       json
+// @Produce      json
+// @Param        request  body  model.LoginReq  true  "Kirish ma'lumotlari (email va parol)"
+// @Success      200  {object}  model.LoginResp  "Access va Refresh tokenlar qaytarildi"
+// @Failure      400  {object}  model.Error      "Xatolik yuz berdi"
+// @Failure      500  {object}  model.Error      "Server xatosi"
+// @Router       /auth/login [post]
 func (h *handlerImpl) Login(c *gin.Context) {
 	req := model.LoginReq{}
 	err := c.ShouldBindJSON(&req)
@@ -126,7 +146,7 @@ func (h *handlerImpl) Login(c *gin.Context) {
 			Message: "Refresh token databazaga saqlanmadi",
 		})
 	}
-	c.JSON(http.StatusOK, model.LogenResp{
+	c.JSON(http.StatusOK, model.LoginResp{
 		AccessToken: access,
 		RefreshToken: refresh,
 	})
@@ -139,6 +159,15 @@ func isValidEmail(email string) bool {
 	return re.MatchString(email)
 }
 
+// @Summary      Tizimdan chiqish
+// @Description  Ushbu endpoint foydalanuvchini tizimdan chiqaradi va access tokenni blacklisting ro'yxatiga qo'shadi.
+// @Tags         Authentication
+// @Accept       json
+// @Produce      json
+// @Param        Acces-Token  header  string  true  "Access token"
+// @Success      200  {string}  string  "Tizimdan muvaffaqiyatli chiqdingiz, biz sizni yana kutamiz."
+// @Failure      400  {object}  model.Error  "Xatolik yuz berdi"
+// @Router       /auth/logout [post]
 func(h *handlerImpl) Logout(c *gin.Context){
 	access := c.GetHeader("Acces-Token")
 	claim, err := token.ExtractClaimToken(access)
@@ -175,6 +204,16 @@ func(h *handlerImpl) ForgotPassword(c *gin.Context){
 	
 }
 
+// @Summary      Parolni qayta tiklash
+// @Description  Ushbu endpoint foydalanuvchining parolini qayta tiklaydi.
+// @Tags         Authentication
+// @Accept       json
+// @Produce      json
+// @Param        Acces-Token  header  string  true  "Access token"
+// @Param        password     body    string  true  "Yangi parol"
+// @Success      200  {object}  model.ResetPassResp  "Parol muvaffaqiyatli tiklandi"
+// @Failure      400  {object}  model.Error          "Xatolik yuz berdi"
+// @Router       /auth/reset-password [post]
 func(h *handlerImpl) ResetPassword(c *gin.Context){
 	access := c.GetHeader("Acces-Token")
 	claim, err := token.ExtractClaimToken(access)
@@ -213,6 +252,16 @@ func(h *handlerImpl) ResetPassword(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Parolni o'zgartirish
+// @Description  Ushbu endpoint foydalanuvchining parolini o'zgartiradi.
+// @Tags         Authentication
+// @Accept       json
+// @Produce      json
+// @Param        Acces-Token  header  string  true  "Access token"
+// @Param        request      body    model.ChangePassReq  true  "Parolni o'zgartirish uchun foydalanuvchi ma'lumotlari"
+// @Success      200  {object}  model.ChangePassResp  "Parol muvaffaqiyatli o'zgartirildi"
+// @Failure      400  {object}  model.Error            "Xatolik yuz berdi"
+// @Router       /auth/change-password [post]
 func(h *handlerImpl) ChangePassword(c *gin.Context){
 	access := c.GetHeader("Acces-Token")
 	claim, err := token.ExtractClaimToken(access)

@@ -16,7 +16,7 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
-type LogenResp struct {
+type LoginResp struct {
 	RefreshToken string `json:"refresh_token"`
 	AccessToken  string `json:"access_token"`
 }

@@ -11,6 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary      Foydalanuvchilarni olish
+// @Description  Ushbu endpoint mavjud foydalanuvchilar ro'yxatini olish uchun ishlatiladi. Ro'yxat sahifalash orqali cheklangan.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        page    query     int    false  "Sahifa raqami, default: 1"
+// @Param        limit   query     int    false  "Har bir sahifadagi foydalanuvchilar soni, default: 10"
+// @Success      200  {object}  users.GetUserRes  "Foydalanuvchilar ro'yxati muvaffaqiyatli qaytarildi"
+// @Failure      400  {object}  model.Error     "Xatolik yuz berdi"
+// @Router       /user/getUsers [get]
 func (h *handlerImpl) GetUsers(c *gin.Context) {
 	var page, limit int
 	page, err := strconv.Atoi(c.Query("page"))
@@ -37,6 +48,16 @@ func (h *handlerImpl) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchini o'chirish
+// @Description  Ushbu endpoint ma'lum bir foydalanuvchini ID orqali o'chirish uchun ishlatiladi.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        id   path      string  true  "Foydalanuvchi IDsi"
+// @Success      200  {object}  users.Massage  "Foydalanuvchi muvaffaqiyatli o'chirildi"
+// @Failure      400  {object}  model.Error        "Xatolik yuz berdi"
+// @Router       /user/deleteUser{id} [delete]
 func (h *handlerImpl) DeleteUser(c *gin.Context) {
 	resp, err := h.UserService.DeleteUsers(c, &pb.Id{Id: c.Param("id")})
 	if err != nil {
@@ -50,6 +71,16 @@ func (h *handlerImpl) DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchini ID orqali olish
+// @Description  Ushbu endpoint ma'lum bir foydalanuvchini ID orqali olish uchun ishlatiladi.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        id   path      string  true  "Foydalanuvchi IDsi"
+// @Success      200  {object}  users.User  "Foydalanuvchi ma'lumotlari muvaffaqiyatli olindi"
+// @Failure      400  {object}  model.Error         "Xatolik yuz berdi"
+// @Router       /user/getUser{id} [get]
 func (h *handlerImpl) GetByIdUsers(c *gin.Context) {
 	resp, err := h.UserService.GetByIdUsers(c, &pb.Id{Id: c.Param("id")})
 	if err != nil {
@@ -63,6 +94,17 @@ func (h *handlerImpl) GetByIdUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchini kuzatish
+// @Description  Ushbu endpoint orqali foydalanuvchi boshqa foydalanuvchini kuzatishi mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        id            body      string  true  "Kuzatilayotgan foydalanuvchi IDsi"
+// @Success      200           {object}  users.Massage  "Kuzatish muvaffaqiyatli amalga oshirildi"
+// @Failure      400           {object}  model.Error       "Xatolik yuz berdi"
+// @Router       /user/subscribe [post]
 func (h *handlerImpl) Subscribe(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -100,6 +142,18 @@ func (h *handlerImpl) Subscribe(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchining kuzatuvchilarini olish
+// @Description  Ushbu endpoint orqali foydalanuvchining kuzatuvchilarini ro'yxatini olish mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        page          query     int     false "Qaysi sahifani ko'rmoqchisiz? Default: 1"
+// @Param        limit         query     int     false "Bir sahifada nechta element bo'lishi kerak? Default: 10"
+// @Success      200           {object}  users.GetaFollowersRes  "Foydalanuvchining kuzatuvchilar ro'yxati"
+// @Failure      400           {object}  model.Error          "Xatolik yuz berdi"
+// @Router       /user/followers [get]
 func (h *handlerImpl) GetFollowers(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -137,6 +191,17 @@ func (h *handlerImpl) GetFollowers(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchidan kuzatuvchini o'chirish
+// @Description  Ushbu endpoint orqali foydalanuvchidan kuzatuvchini o'chirishingiz mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        id            body      string  true  "O'chirilishi kerak bo'lgan kuzatuvchi IDsi"
+// @Success      200           {object}  users.Massage  "Kuzatuvchini muvaffaqiyatli o'chirdi"
+// @Failure      400           {object}  model.Error           "Xatolik yuz berdi"
+// @Router       /user/deleteFollower/{id} [delete]
 func(h *handlerImpl) DeleteFollower(c *gin.Context){
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -173,6 +238,17 @@ func(h *handlerImpl) DeleteFollower(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Kuzatuvchi ma'lumotlarini olish
+// @Description  Ushbu endpoint orqali ma'lum bir kuzatuvchining ma'lumotlarini olish mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        id            body      string  true  "Kuzatuvchi IDsi"
+// @Success      200           {object}  users.Follow  "Kuzatuvchi ma'lumotlari"
+// @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
+// @Router       /user/getFollower/{id} [get]
 func(h *handlerImpl) GetByIdFollower(c *gin.Context){
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -196,7 +272,7 @@ func(h *handlerImpl) GetByIdFollower(c *gin.Context){
 		return 
 	}
 
-	resp, err := h.UserService.GetByIdFollower(c, &pb.FollowerReq{
+	resp, err := h.UserService.GetByIdFollower(c, &pb.DeleteFollowerReq{
 		UserId: claim.Id,
 		FollowerId: id,
 	})
@@ -211,6 +287,18 @@ func(h *handlerImpl) GetByIdFollower(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchi kimlarni kuzatayotganini olish
+// @Description  Ushbu endpoint orqali ma'lum bir foydalanuvchining kimlarni kuzatayotganini olish mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        page          query     int     false "Sahifa raqami"
+// @Param        limit         query     int     false "Sahifadagi elementlar soni"
+// @Success      200           {object}  users.GetaFollowingRes  "Kuzatadigan foydalanuvchilar ro'yxati"
+// @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
+// @Router       /user/following [get]
 func(h *handlerImpl) GetFollowing(c *gin.Context){
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -249,6 +337,17 @@ func(h *handlerImpl) GetFollowing(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchi kuzatayotgan foydalanuvchini o'chirish
+// @Description  Ushbu endpoint orqali ma'lum bir foydalanuvchining kuzatayotgan boshqa foydalanuvchisini o'chirish mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        id            body      string  true  "Kuzatishni to'xtatmoqchi bo'lgan foydalanuvchi ID'si"
+// @Success      200           {object}  users.Massage  "O'chirish muvaffaqiyatli amalga oshirildi"
+// @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
+// @Router       /users/deleteFollowing/{id} [delete]
 func(h *handlerImpl) DeleteFollowing(c *gin.Context){
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
@@ -287,6 +386,17 @@ func(h *handlerImpl) DeleteFollowing(c *gin.Context){
 	c.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Foydalanuvchi kimni kuzatayotganini ID orqali olish
+// @Description  Ushbu endpoint orqali ma'lum bir foydalanuvchining kimni kuzatayotganini ID orqali olish mumkin.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Security 	 ApiKeyAuth
+// @Param        Athorization  header    string  true  "Bearer token bilan birga keladi"
+// @Param        id            body      string  true  "Kuzatmoqchi bo'lgan foydalanuvchi ID'si"
+// @Success      200           {object}  users.Follow  "Kuzatmoqchi bo'lgan foydalanuvchining ma'lumotlari"
+// @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
+// @Router       /users/getFollowing/{id} [get]
 func(h *handlerImpl) GetByIdFollowing(c *gin.Context){
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
