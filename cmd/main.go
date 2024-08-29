@@ -17,6 +17,7 @@ import (
 )
 
 func main() {
+	log.Println("Server started ...")
 	logger := logs.InitLogger()
 	cfg := config.LoadConfig()
 
@@ -48,8 +49,8 @@ func main() {
 
 	go func() {
 		controller := api.NewController(gin.Default(), logger)
-		controller.StartRouter(cfg)
 		controller.SetUpRouter(u, *serv)
+		controller.StartRouter(cfg)
 	}()
 
 	log.Printf("Service is run: %v", cfg.USER_SERVICE)
