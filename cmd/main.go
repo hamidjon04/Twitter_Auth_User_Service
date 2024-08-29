@@ -4,7 +4,7 @@ import (
 	"auth/api"
 	"auth/config"
 	"auth/generated/users"
-	logs "auth/pkg"
+	"auth/pkg/logs"
 	"auth/service"
 	"auth/storage"
 	"auth/storage/postgres"
@@ -46,9 +46,9 @@ func main() {
 	s := grpc.NewServer()
 	users.RegisterUserServiceServer(s, serv)
 
-	go func ()  {
+	go func() {
 		controller := api.NewController(gin.Default(), logger)
-		controller.StartRouter(cfg)	
+		controller.StartRouter(cfg)
 		controller.SetUpRouter(u, *serv)
 	}()
 
