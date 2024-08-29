@@ -1,7 +1,6 @@
 package redisDb
 
 import (
-	"auth/model"
 	"context"
 	"time"
 
@@ -9,9 +8,9 @@ import (
 )
 
 type RedisStore interface {
-	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error)
+	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) error
 	IsTokenBlacklisted(ctx context.Context, token string) (bool, error)
-	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error)
+	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) error
 	IsCodeValid(ctx context.Context, email, code string) (bool, error)
 }
 
@@ -25,7 +24,7 @@ func NewRedisStore(client *redis.Client) RedisStore {
 	}
 }
 
-func (rdb *redisStoreImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error) {
+func (rdb *redisStoreImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) error {
 	err := rdb.client.Set(ctx, token, "blacklisted", expirationTime).Err()
 	if err != nil {
 		return err
@@ -44,19 +43,10 @@ func (rdb *redisStoreImpl) IsTokenBlacklisted(ctx context.Context, token string)
 	return val == "blacklisted", nil
 }
 
-func (rdb *redisStoreImpl) StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error) {
+func (rdb *redisStoreImpl) StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) error {
 	err := rdb.client.Set(ctx, email+":code", code, exprationTime).Err()
-	if err != nil {
-		return &model.SuccessResponse{
-			Message: err.Error(),
-			Success: false,
-		}, nil
-	}
-
-	return &model.SuccessResponse{
-		Message: "Code stored successfully",
-		Success: true,
-	}, nil
+	
+	return err
 }
 
 func (rdb *redisStoreImpl) IsCodeValid(ctx context.Context, email, code string) (bool, error) {

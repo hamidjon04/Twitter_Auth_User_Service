@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"math/rand/v2"
+	"strconv"
 	"time"
 )
 
@@ -13,13 +15,13 @@ type AuthenticateService interface {
 	RegisterUser(request *model.RegisterReq) (*model.RegisterResp, error)
 	ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error)
 	ChangePassword(request *model.ChangePassReq) (*model.ChangePassResp, error)
-	SaveRefreshToken(request *model.SaveToken) (error)
-	InvalidateRefreshToken(userId string) (error)
+	SaveRefreshToken(request *model.SaveToken) error
+	InvalidateRefreshToken(userId string) error
 	IsRefreshTokenValid(tokenString string) (bool, error)
 	GetUserByEmail(email string) (*model.UserInfo, error)
-	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error)
+	AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) error
 	IsTokenBlacklisted(ctx context.Context, token string) (bool, error)
-	StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error)
+	ForgotPassword(ctx context.Context, req *model.ForgotPassReq) (*model.ForgotPassResp, error)
 	IsCodeValid(ctx context.Context, email, code string) (bool, error)
 }
 
@@ -45,6 +47,22 @@ func (s *authenticateServiceImpl) RegisterUser(request *model.RegisterReq) (*mod
 	return resp, err
 }
 
+func (s *authenticateServiceImpl) ForgotPassword(ctx context.Context, req *model.ForgotPassReq) (*model.ForgotPassResp, error) {
+	code := rand.IntN(999999) + 100000
+
+	err := s.storage.RedisUserRepo().StoreCode(ctx, req.Email, strconv.Itoa(code), time.Duration(time.Minute*5))
+	if err != nil {
+		s.logger.Error(fmt.Sprint("Error codeni redisga saqlashda: ", err))
+		return &model.ForgotPassResp{
+			Message: err.Error(),
+		}, err
+	}
+
+	return &model.ForgotPassResp{
+		Message: fmt.Sprintf("Code %s emailga yuborildi", req.Email),
+	}, nil
+}
+
 func (s *authenticateServiceImpl) ResetPassword(request *model.ResetPassReq) (*model.ResetPassResp, error) {
 	resp, err := s.storage.UserRepo().ResetPass(request)
 	if err != nil {
@@ -65,7 +83,7 @@ func (s *authenticateServiceImpl) ChangePassword(request *model.ChangePassReq) (
 	return &resp, err
 }
 
-func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) (error) {
+func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) error {
 	err := s.storage.UserRepo().SaveRefreshToken(request)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error on token save for user: %v", err))
@@ -73,7 +91,7 @@ func (s *authenticateServiceImpl) SaveRefreshToken(request *model.SaveToken) (er
 	return err
 }
 
-func (s *authenticateServiceImpl) InvalidateRefreshToken(userID string) (error) {
+func (s *authenticateServiceImpl) InvalidateRefreshToken(userID string) error {
 	err := s.storage.UserRepo().InvalidateRefreshToken(userID)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error on token invalidation for the user: %v", err))
@@ -102,7 +120,7 @@ func (s *authenticateServiceImpl) GetUserByEmail(email string) (*model.UserInfo,
 	return resp, nil
 }
 
-func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) (error) {
+func (s *authenticateServiceImpl) AddTokenBlacklisted(ctx context.Context, token string, expirationTime time.Duration) error {
 	err := s.storage.RedisUserRepo().AddTokenBlacklisted(ctx, token, expirationTime)
 	if err != nil {
 		s.logger.Error(fmt.Sprintf("Error tokenni blacklistga solishda: %v", err))
@@ -121,16 +139,6 @@ func (s *authenticateServiceImpl) IsTokenBlacklisted(ctx context.Context, token 
 	return istokenblacklest, err
 }
 
-func (s *authenticateServiceImpl) StoreCode(ctx context.Context, email, code string, exprationTime time.Duration) (*model.SuccessResponse, error) {
-	resp, err := s.storage.RedisUserRepo().StoreCode(ctx, email, code, exprationTime)
-	if err != nil {
-		s.logger.Error(fmt.Sprintf("Error codeni saqlab ketishda: %v", err))
-		return resp, err
-	}
-
-	return resp, err
-}
-
 func (s *authenticateServiceImpl) IsCodeValid(ctx context.Context, email, code string) (bool, error) {
 	resp, err := s.storage.RedisUserRepo().IsCodeValid(ctx, email, code)
 	if err != nil {
@@ -140,5 +148,3 @@ func (s *authenticateServiceImpl) IsCodeValid(ctx context.Context, email, code s
 
 	return resp, err
 }
-
-

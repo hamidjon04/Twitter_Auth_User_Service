@@ -20,6 +20,16 @@ definitions:
       message:
         type: string
     type: object
+  model.ForgotPassReq:
+    properties:
+      email:
+        type: string
+    type: object
+  model.ForgotPassResp:
+    properties:
+      message:
+        type: string
+    type: object
   model.LoginReq:
     properties:
       email:
@@ -196,6 +206,40 @@ paths:
           schema:
             $ref: '#/definitions/model.Error'
       summary: Parolni o'zgartirish
+      tags:
+      - Authentication
+  /auth/forgot-password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Forgot Password
+        in: body
+        name: Email
+        required: true
+        schema:
+          $ref: '#/definitions/model.ForgotPassReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ForgotPassResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Forgot password parol esdan chiqqanda
       tags:
       - Authentication
   /auth/login:

@@ -218,14 +218,9 @@ func (u *userImpl) GetByIdUsers(in *pb.Id) (*pb.User, error) {
 			users 
 		WHERE 
 			id=$1 AND deleted_at IS NULL`, in.Id).
-		Scan(&user.Id, &user.Email, &user.Username, &user.Name, &user.Password, &user.Lastname, &user.BirthDay, &user.Image, &user.CreatedAt, &user.UpdatedAt,)
+		Scan(&user.Id, &user.Email, &user.Username, &user.Name, &user.Password, &user.Lastname, &user.BirthDay, &user.Image, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
-
-func(u *userImpl) ForgotPassword(req *model.ForgotPassReq)(*model.ForgotPassResp, error){
-
-}
-

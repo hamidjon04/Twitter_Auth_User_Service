@@ -200,8 +200,39 @@ func(h *handlerImpl) Logout(c *gin.Context){
 	c.JSON(http.StatusOK, "Tizimdan muvaffaqiyatli chiqdingiz, biz sizni yana kutamiz.")
 }
 
+// @summary 	Forgot password parol esdan chiqqanda
+// @summar 		ushbu endpoint foydalanuvchi parolini esdan chiqqanda email orqali parolni tiklash uchun so'rov yuboradi
+// @Tags 		Authentication
+// @Accept		json
+// @Produce		json
+// @Param 		Email body model.ForgotPassReq true "Forgot Password"
+// @Success		200 {object} model.ForgotPassResp
+// @Failure		404 {object} map[string]interface{}
+// @Failure		400 {object} model.Error
+// @Failure 	500 {object} model.Error
+// @Router		/auth/forgot-password [post]
 func(h *handlerImpl) ForgotPassword(c *gin.Context){
-	
+	var forgotPass model.ForgotPassReq
+	if err := c.ShouldBindJSON(&forgotPass); err != nil {
+		h.Logger.Error(fmt.Sprintf("Error: %v", err.Error()))
+		c.JSON(400, model.Error{
+			Error: err.Error(),
+			Message: "Emailni olishda xatolik",
+		})
+		return
+	}
+
+	resp, err := h.Service.ForgotPassword(c, &forgotPass)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Error: %v", err.Error()))
+		c.JSON(500, model.Error{
+			Error: err.Error(),
+			Message: "Codeni emalga jo'natishda xatolik",
+		})
+		return
+	}
+
+	c.JSON(200, resp)
 }
 
 // @Summary      Parolni qayta tiklash

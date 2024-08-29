@@ -202,7 +202,7 @@ func (h *handlerImpl) GetFollowers(c *gin.Context) {
 // @Success      200           {object}  users.Massage  "Kuzatuvchini muvaffaqiyatli o'chirdi"
 // @Failure      400           {object}  model.Error           "Xatolik yuz berdi"
 // @Router       /user/deleteFollower/{id} [delete]
-func(h *handlerImpl) DeleteFollower(c *gin.Context){
+func (h *handlerImpl) DeleteFollower(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
 	if err != nil {
@@ -214,24 +214,24 @@ func(h *handlerImpl) DeleteFollower(c *gin.Context){
 		return
 	}
 
-	var id string 
+	var id string
 	err = c.ShouldBindJSON(&id)
-	if err != nil{
-		h.Logger.Error("Ma'lumotlarni o'qishda xatolik: %v", err)
+	if err != nil {
+		h.Logger.Error(fmt.Sprintf("Ma'lumotlarni o'qishda xatolik: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "Ma'lumotlarni o'qishda xatolik",
 		})
 	}
 
 	resp, err := h.UserService.DeleteFollower(c, &pb.DeleteFollowerReq{
-		UserId: claim.Id,
+		UserId:     claim.Id,
 		FollowerId: id,
 	})
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("DeleteFollower request error: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "DeleteFollower request error",
 		})
 	}
@@ -249,7 +249,7 @@ func(h *handlerImpl) DeleteFollower(c *gin.Context){
 // @Success      200           {object}  users.Follow  "Kuzatuvchi ma'lumotlari"
 // @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
 // @Router       /user/getFollower/{id} [get]
-func(h *handlerImpl) GetByIdFollower(c *gin.Context){
+func (h *handlerImpl) GetByIdFollower(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
 	if err != nil {
@@ -263,26 +263,26 @@ func(h *handlerImpl) GetByIdFollower(c *gin.Context){
 
 	var id string
 	err = c.ShouldBindJSON(&id)
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("Ma'lumotlarni o'qishda xatolik: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "Ma'lumotlarni o'qishda xatolik",
 		})
-		return 
+		return
 	}
 
 	resp, err := h.UserService.GetByIdFollower(c, &pb.DeleteFollowerReq{
-		UserId: claim.Id,
+		UserId:     claim.Id,
 		FollowerId: id,
 	})
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("GetByIdFollower request error: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "GetByIdFollower request error",
 		})
-		return 
+		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -299,7 +299,7 @@ func(h *handlerImpl) GetByIdFollower(c *gin.Context){
 // @Success      200           {object}  users.GetaFollowingRes  "Kuzatadigan foydalanuvchilar ro'yxati"
 // @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
 // @Router       /user/following [get]
-func(h *handlerImpl) GetFollowing(c *gin.Context){
+func (h *handlerImpl) GetFollowing(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
 	if err != nil {
@@ -322,14 +322,14 @@ func(h *handlerImpl) GetFollowing(c *gin.Context){
 	}
 
 	resp, err := h.UserService.GetFollowing(c, &pb.GetFollowingReq{
-		Id: claim.Id,
+		Id:    claim.Id,
 		Limit: int32(limit),
-		Page: int32(page),
+		Page:  int32(page),
 	})
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("GetFollowing Request error: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "GetFollowing request error",
 		})
 		return
@@ -348,7 +348,7 @@ func(h *handlerImpl) GetFollowing(c *gin.Context){
 // @Success      200           {object}  users.Massage  "O'chirish muvaffaqiyatli amalga oshirildi"
 // @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
 // @Router       /users/deleteFollowing/{id} [delete]
-func(h *handlerImpl) DeleteFollowing(c *gin.Context){
+func (h *handlerImpl) DeleteFollowing(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
 	if err != nil {
@@ -362,23 +362,23 @@ func(h *handlerImpl) DeleteFollowing(c *gin.Context){
 
 	var id string
 	err = c.ShouldBindJSON(&id)
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("Ma'lumotlarni o'qishda xatolik: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "Ma'lumotlarni o'qishda xatolik",
 		})
-		return 
+		return
 	}
 
 	resp, err := h.UserService.DeleteFollowing(c, &pb.DeleteFollowerReq{
-		UserId: claim.Id,
+		UserId:     claim.Id,
 		FollowerId: id,
 	})
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("DeleteFollowing Request error: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "DeleteFollowing request error",
 		})
 		return
@@ -397,7 +397,7 @@ func(h *handlerImpl) DeleteFollowing(c *gin.Context){
 // @Success      200           {object}  users.Follow  "Kuzatmoqchi bo'lgan foydalanuvchining ma'lumotlari"
 // @Failure      400           {object}  model.Error  "Xatolik yuz berdi"
 // @Router       /users/getFollowing/{id} [get]
-func(h *handlerImpl) GetByIdFollowing(c *gin.Context){
+func (h *handlerImpl) GetByIdFollowing(c *gin.Context) {
 	access := c.GetHeader("Athorization")
 	claim, err := token.ExtractClaimToken(access)
 	if err != nil {
@@ -411,23 +411,23 @@ func(h *handlerImpl) GetByIdFollowing(c *gin.Context){
 
 	var id string
 	err = c.ShouldBindJSON(&id)
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("Ma'lumotlarni o'qishda xatolik: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "Ma'lumotlarni o'qishda xatolik",
 		})
-		return 
+		return
 	}
 
 	resp, err := h.UserService.GetByIdFollowing(c, &pb.DeleteFollowerReq{
-		UserId: claim.Id,
+		UserId:     claim.Id,
 		FollowerId: id,
 	})
-	if err != nil{
+	if err != nil {
 		h.Logger.Error(fmt.Sprintf("GetByIdFollowing Request error: %v", err))
 		c.JSON(http.StatusBadRequest, model.Error{
-			Error: err.Error(),
+			Error:   err.Error(),
 			Message: "GetByIdFollowing request error",
 		})
 		return
