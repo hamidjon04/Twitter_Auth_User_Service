@@ -20,6 +20,53 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Id struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *Id) Reset() {
+	*x = Id{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Id) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Id) ProtoMessage() {}
+
+func (x *Id) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Id.ProtoReflect.Descriptor instead.
+func (*Id) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Id) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 type DeleteFollowerReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -32,7 +79,7 @@ type DeleteFollowerReq struct {
 func (x *DeleteFollowerReq) Reset() {
 	*x = DeleteFollowerReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[0]
+		mi := &file_user_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -45,7 +92,7 @@ func (x *DeleteFollowerReq) String() string {
 func (*DeleteFollowerReq) ProtoMessage() {}
 
 func (x *DeleteFollowerReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[0]
+	mi := &file_user_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +105,7 @@ func (x *DeleteFollowerReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFollowerReq.ProtoReflect.Descriptor instead.
 func (*DeleteFollowerReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{0}
+	return file_user_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *DeleteFollowerReq) GetUserId() string {
@@ -75,148 +122,6 @@ func (x *DeleteFollowerReq) GetFollowerId() string {
 	return ""
 }
 
-type Id struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (x *Id) Reset() {
-	*x = Id{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Id) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Id) ProtoMessage() {}
-
-func (x *Id) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Id.ProtoReflect.Descriptor instead.
-func (*Id) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Id) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type Follow struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Lastname string `protobuf:"bytes,5,opt,name=lastname,proto3" json:"lastname,omitempty"`
-	BirthDay string `protobuf:"bytes,6,opt,name=birth_day,json=birthDay,proto3" json:"birth_day,omitempty"`
-	Image    string `protobuf:"bytes,7,opt,name=image,proto3" json:"image,omitempty"`
-}
-
-func (x *Follow) Reset() {
-	*x = Follow{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Follow) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Follow) ProtoMessage() {}
-
-func (x *Follow) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Follow.ProtoReflect.Descriptor instead.
-func (*Follow) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *Follow) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Follow) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *Follow) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *Follow) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Follow) GetLastname() string {
-	if x != nil {
-		return x.Lastname
-	}
-	return ""
-}
-
-func (x *Follow) GetBirthDay() string {
-	if x != nil {
-		return x.BirthDay
-	}
-	return ""
-}
-
-func (x *Follow) GetImage() string {
-	if x != nil {
-		return x.Image
-	}
-	return ""
-}
-
 type Massage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -229,7 +134,7 @@ type Massage struct {
 func (x *Massage) Reset() {
 	*x = Massage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[3]
+		mi := &file_user_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -242,7 +147,7 @@ func (x *Massage) String() string {
 func (*Massage) ProtoMessage() {}
 
 func (x *Massage) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[3]
+	mi := &file_user_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -255,7 +160,7 @@ func (x *Massage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Massage.ProtoReflect.Descriptor instead.
 func (*Massage) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{3}
+	return file_user_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Massage) GetMessage() string {
@@ -277,14 +182,15 @@ type GetUserReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Limit int32 `protobuf:"varint,1,opt,name=Limit,proto3" json:"Limit,omitempty"`
-	Page  int32 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Limit int32  `protobuf:"varint,2,opt,name=Limit,proto3" json:"Limit,omitempty"`
+	Page  int32  `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 }
 
 func (x *GetUserReq) Reset() {
 	*x = GetUserReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[4]
+		mi := &file_user_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -297,7 +203,7 @@ func (x *GetUserReq) String() string {
 func (*GetUserReq) ProtoMessage() {}
 
 func (x *GetUserReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[4]
+	mi := &file_user_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -310,7 +216,14 @@ func (x *GetUserReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserReq.ProtoReflect.Descriptor instead.
 func (*GetUserReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{4}
+	return file_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetUserReq) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *GetUserReq) GetLimit() int32 {
@@ -340,7 +253,7 @@ type GetUserRes struct {
 func (x *GetUserRes) Reset() {
 	*x = GetUserRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[5]
+		mi := &file_user_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -353,7 +266,7 @@ func (x *GetUserRes) String() string {
 func (*GetUserRes) ProtoMessage() {}
 
 func (x *GetUserRes) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[5]
+	mi := &file_user_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -366,7 +279,7 @@ func (x *GetUserRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserRes.ProtoReflect.Descriptor instead.
 func (*GetUserRes) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{5}
+	return file_user_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetUserRes) GetUsers() []*User {
@@ -410,7 +323,7 @@ type User struct {
 func (x *User) Reset() {
 	*x = User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[6]
+		mi := &file_user_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -423,7 +336,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[6]
+	mi := &file_user_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -436,7 +349,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{6}
+	return file_user_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *User) GetId() string {
@@ -521,7 +434,7 @@ type FollowerReq struct {
 func (x *FollowerReq) Reset() {
 	*x = FollowerReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[7]
+		mi := &file_user_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -534,7 +447,7 @@ func (x *FollowerReq) String() string {
 func (*FollowerReq) ProtoMessage() {}
 
 func (x *FollowerReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[7]
+	mi := &file_user_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -547,7 +460,7 @@ func (x *FollowerReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FollowerReq.ProtoReflect.Descriptor instead.
 func (*FollowerReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{7}
+	return file_user_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *FollowerReq) GetUserId() string {
@@ -577,7 +490,7 @@ type GetFollowersReq struct {
 func (x *GetFollowersReq) Reset() {
 	*x = GetFollowersReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[8]
+		mi := &file_user_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -590,7 +503,7 @@ func (x *GetFollowersReq) String() string {
 func (*GetFollowersReq) ProtoMessage() {}
 
 func (x *GetFollowersReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[8]
+	mi := &file_user_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -603,7 +516,7 @@ func (x *GetFollowersReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowersReq.ProtoReflect.Descriptor instead.
 func (*GetFollowersReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{8}
+	return file_user_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetFollowersReq) GetId() string {
@@ -640,7 +553,7 @@ type GetaFollowersRes struct {
 func (x *GetaFollowersRes) Reset() {
 	*x = GetaFollowersRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[9]
+		mi := &file_user_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -653,7 +566,7 @@ func (x *GetaFollowersRes) String() string {
 func (*GetaFollowersRes) ProtoMessage() {}
 
 func (x *GetaFollowersRes) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[9]
+	mi := &file_user_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -666,7 +579,7 @@ func (x *GetaFollowersRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetaFollowersRes.ProtoReflect.Descriptor instead.
 func (*GetaFollowersRes) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{9}
+	return file_user_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetaFollowersRes) GetFollowers() []*Followers {
@@ -705,7 +618,7 @@ type Followers struct {
 func (x *Followers) Reset() {
 	*x = Followers{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[10]
+		mi := &file_user_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -718,7 +631,7 @@ func (x *Followers) String() string {
 func (*Followers) ProtoMessage() {}
 
 func (x *Followers) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[10]
+	mi := &file_user_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -731,7 +644,7 @@ func (x *Followers) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Followers.ProtoReflect.Descriptor instead.
 func (*Followers) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{10}
+	return file_user_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Followers) GetId() string {
@@ -781,7 +694,7 @@ type FollowingReq struct {
 func (x *FollowingReq) Reset() {
 	*x = FollowingReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[11]
+		mi := &file_user_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -794,7 +707,7 @@ func (x *FollowingReq) String() string {
 func (*FollowingReq) ProtoMessage() {}
 
 func (x *FollowingReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[11]
+	mi := &file_user_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -807,7 +720,7 @@ func (x *FollowingReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FollowingReq.ProtoReflect.Descriptor instead.
 func (*FollowingReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{11}
+	return file_user_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *FollowingReq) GetUserId() string {
@@ -837,7 +750,7 @@ type GetFollowingReq struct {
 func (x *GetFollowingReq) Reset() {
 	*x = GetFollowingReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[12]
+		mi := &file_user_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -850,7 +763,7 @@ func (x *GetFollowingReq) String() string {
 func (*GetFollowingReq) ProtoMessage() {}
 
 func (x *GetFollowingReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[12]
+	mi := &file_user_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -863,7 +776,7 @@ func (x *GetFollowingReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFollowingReq.ProtoReflect.Descriptor instead.
 func (*GetFollowingReq) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{12}
+	return file_user_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetFollowingReq) GetId() string {
@@ -900,7 +813,7 @@ type GetaFollowingRes struct {
 func (x *GetaFollowingRes) Reset() {
 	*x = GetaFollowingRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[13]
+		mi := &file_user_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -913,7 +826,7 @@ func (x *GetaFollowingRes) String() string {
 func (*GetaFollowingRes) ProtoMessage() {}
 
 func (x *GetaFollowingRes) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[13]
+	mi := &file_user_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -926,7 +839,7 @@ func (x *GetaFollowingRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetaFollowingRes.ProtoReflect.Descriptor instead.
 func (*GetaFollowingRes) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{13}
+	return file_user_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetaFollowingRes) GetFollowing() []*Following {
@@ -965,7 +878,7 @@ type Following struct {
 func (x *Following) Reset() {
 	*x = Following{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_proto_msgTypes[14]
+		mi := &file_user_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -978,7 +891,7 @@ func (x *Following) String() string {
 func (*Following) ProtoMessage() {}
 
 func (x *Following) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[14]
+	mi := &file_user_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -991,7 +904,7 @@ func (x *Following) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Following.ProtoReflect.Descriptor instead.
 func (*Following) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{14}
+	return file_user_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Following) GetId() string {
@@ -1029,35 +942,120 @@ func (x *Following) GetUpdatedAt() string {
 	return ""
 }
 
+type Follow struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Email    string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Name     string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Lastname string `protobuf:"bytes,5,opt,name=lastname,proto3" json:"lastname,omitempty"`
+	Image    string `protobuf:"bytes,6,opt,name=image,proto3" json:"image,omitempty"`
+	BirthDay string `protobuf:"bytes,7,opt,name=birth_day,json=birthDay,proto3" json:"birth_day,omitempty"`
+}
+
+func (x *Follow) Reset() {
+	*x = Follow{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Follow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Follow) ProtoMessage() {}
+
+func (x *Follow) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Follow.ProtoReflect.Descriptor instead.
+func (*Follow) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *Follow) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Follow) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *Follow) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *Follow) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Follow) GetLastname() string {
+	if x != nil {
+		return x.Lastname
+	}
+	return ""
+}
+
+func (x *Follow) GetImage() string {
+	if x != nil {
+		return x.Image
+	}
+	return ""
+}
+
+func (x *Follow) GetBirthDay() string {
+	if x != nil {
+		return x.BirthDay
+	}
+	return ""
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 var file_user_proto_rawDesc = []byte{
 	0x0a, 0x0a, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x75, 0x73,
-	0x65, 0x72, 0x73, 0x22, 0x4d, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x46, 0x6f, 0x6c,
-	0x6c, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
-	0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x5f, 0x69, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x66, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x72,
-	0x49, 0x64, 0x22, 0x14, 0x0a, 0x02, 0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0xad, 0x01, 0x0a, 0x06, 0x46, 0x6f, 0x6c,
-	0x6c, 0x6f, 0x77, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x02, 0x69, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12,
-	0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
-	0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6c, 0x61, 0x73,
-	0x74, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6c, 0x61, 0x73,
-	0x74, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x62, 0x69, 0x72, 0x74, 0x68, 0x5f, 0x64,
-	0x61, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x62, 0x69, 0x72, 0x74, 0x68, 0x44,
-	0x61, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x22, 0x3d, 0x0a, 0x07, 0x4d, 0x61, 0x73, 0x73,
+	0x65, 0x72, 0x73, 0x22, 0x14, 0x0a, 0x02, 0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x4d, 0x0a, 0x11, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x46, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x17,
+	0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x6f, 0x6c, 0x6c, 0x6f,
+	0x77, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x66, 0x6f,
+	0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x49, 0x64, 0x22, 0x3d, 0x0a, 0x07, 0x4d, 0x61, 0x73, 0x73,
 	0x61, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x18, 0x0a,
 	0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07,
-	0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x22, 0x36, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x55, 0x73,
-	0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x14, 0x0a, 0x05, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x01,
+	0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x22, 0x46, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x55, 0x73,
+	0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x70,
-	0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x70, 0x61, 0x67, 0x65, 0x22,
+	0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x70, 0x61, 0x67, 0x65, 0x22,
 	0x59, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x12, 0x21, 0x0a,
 	0x05, 0x75, 0x73, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x75,
 	0x73, 0x65, 0x72, 0x73, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x05, 0x75, 0x73, 0x65, 0x72, 0x73,
@@ -1131,7 +1129,18 @@ var file_user_proto_rawDesc = []byte{
 	0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a,
 	0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x32, 0xed, 0x04, 0x0a, 0x0b,
+	0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0xad, 0x01, 0x0a, 0x06,
+	0x46, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x6c, 0x61, 0x73, 0x74, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x6c, 0x61, 0x73, 0x74, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67,
+	0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x1b,
+	0x0a, 0x09, 0x62, 0x69, 0x72, 0x74, 0x68, 0x5f, 0x64, 0x61, 0x79, 0x18, 0x07, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x62, 0x69, 0x72, 0x74, 0x68, 0x44, 0x61, 0x79, 0x32, 0xed, 0x04, 0x0a, 0x0b,
 	0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x30, 0x0a, 0x08, 0x47,
 	0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x11, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x73, 0x2e,
 	0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x11, 0x2e, 0x75, 0x73, 0x65,
@@ -1189,48 +1198,48 @@ func file_user_proto_rawDescGZIP() []byte {
 
 var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_user_proto_goTypes = []any{
-	(*DeleteFollowerReq)(nil), // 0: users.DeleteFollowerReq
-	(*Id)(nil),                // 1: users.Id
-	(*Follow)(nil),            // 2: users.Follow
-	(*Massage)(nil),           // 3: users.Massage
-	(*GetUserReq)(nil),        // 4: users.GetUserReq
-	(*GetUserRes)(nil),        // 5: users.GetUserRes
-	(*User)(nil),              // 6: users.User
-	(*FollowerReq)(nil),       // 7: users.FollowerReq
-	(*GetFollowersReq)(nil),   // 8: users.GetFollowersReq
-	(*GetaFollowersRes)(nil),  // 9: users.GetaFollowersRes
-	(*Followers)(nil),         // 10: users.Followers
-	(*FollowingReq)(nil),      // 11: users.FollowingReq
-	(*GetFollowingReq)(nil),   // 12: users.GetFollowingReq
-	(*GetaFollowingRes)(nil),  // 13: users.GetaFollowingRes
-	(*Following)(nil),         // 14: users.Following
+	(*Id)(nil),                // 0: users.Id
+	(*DeleteFollowerReq)(nil), // 1: users.DeleteFollowerReq
+	(*Massage)(nil),           // 2: users.Massage
+	(*GetUserReq)(nil),        // 3: users.GetUserReq
+	(*GetUserRes)(nil),        // 4: users.GetUserRes
+	(*User)(nil),              // 5: users.User
+	(*FollowerReq)(nil),       // 6: users.FollowerReq
+	(*GetFollowersReq)(nil),   // 7: users.GetFollowersReq
+	(*GetaFollowersRes)(nil),  // 8: users.GetaFollowersRes
+	(*Followers)(nil),         // 9: users.Followers
+	(*FollowingReq)(nil),      // 10: users.FollowingReq
+	(*GetFollowingReq)(nil),   // 11: users.GetFollowingReq
+	(*GetaFollowingRes)(nil),  // 12: users.GetaFollowingRes
+	(*Following)(nil),         // 13: users.Following
+	(*Follow)(nil),            // 14: users.Follow
 }
 var file_user_proto_depIdxs = []int32{
-	6,  // 0: users.GetUserRes.users:type_name -> users.User
-	10, // 1: users.GetaFollowersRes.followers:type_name -> users.Followers
-	14, // 2: users.GetaFollowingRes.following:type_name -> users.Following
-	4,  // 3: users.UserService.GetUsers:input_type -> users.GetUserReq
-	1,  // 4: users.UserService.DeleteUsers:input_type -> users.Id
-	1,  // 5: users.UserService.GetByIdUsers:input_type -> users.Id
-	7,  // 6: users.UserService.AddFollower:input_type -> users.FollowerReq
-	8,  // 7: users.UserService.GetFollowers:input_type -> users.GetFollowersReq
-	0,  // 8: users.UserService.DeleteFollower:input_type -> users.DeleteFollowerReq
-	0,  // 9: users.UserService.GetByIdFollower:input_type -> users.DeleteFollowerReq
-	11, // 10: users.UserService.AddFollowing:input_type -> users.FollowingReq
-	12, // 11: users.UserService.GetFollowing:input_type -> users.GetFollowingReq
-	0,  // 12: users.UserService.DeleteFollowing:input_type -> users.DeleteFollowerReq
-	0,  // 13: users.UserService.GetByIdFollowing:input_type -> users.DeleteFollowerReq
-	5,  // 14: users.UserService.GetUsers:output_type -> users.GetUserRes
-	3,  // 15: users.UserService.DeleteUsers:output_type -> users.Massage
-	6,  // 16: users.UserService.GetByIdUsers:output_type -> users.User
-	3,  // 17: users.UserService.AddFollower:output_type -> users.Massage
-	9,  // 18: users.UserService.GetFollowers:output_type -> users.GetaFollowersRes
-	3,  // 19: users.UserService.DeleteFollower:output_type -> users.Massage
-	2,  // 20: users.UserService.GetByIdFollower:output_type -> users.Follow
-	3,  // 21: users.UserService.AddFollowing:output_type -> users.Massage
-	13, // 22: users.UserService.GetFollowing:output_type -> users.GetaFollowingRes
-	3,  // 23: users.UserService.DeleteFollowing:output_type -> users.Massage
-	2,  // 24: users.UserService.GetByIdFollowing:output_type -> users.Follow
+	5,  // 0: users.GetUserRes.users:type_name -> users.User
+	9,  // 1: users.GetaFollowersRes.followers:type_name -> users.Followers
+	13, // 2: users.GetaFollowingRes.following:type_name -> users.Following
+	3,  // 3: users.UserService.GetUsers:input_type -> users.GetUserReq
+	0,  // 4: users.UserService.DeleteUsers:input_type -> users.Id
+	0,  // 5: users.UserService.GetByIdUsers:input_type -> users.Id
+	6,  // 6: users.UserService.AddFollower:input_type -> users.FollowerReq
+	7,  // 7: users.UserService.GetFollowers:input_type -> users.GetFollowersReq
+	1,  // 8: users.UserService.DeleteFollower:input_type -> users.DeleteFollowerReq
+	1,  // 9: users.UserService.GetByIdFollower:input_type -> users.DeleteFollowerReq
+	10, // 10: users.UserService.AddFollowing:input_type -> users.FollowingReq
+	11, // 11: users.UserService.GetFollowing:input_type -> users.GetFollowingReq
+	1,  // 12: users.UserService.DeleteFollowing:input_type -> users.DeleteFollowerReq
+	1,  // 13: users.UserService.GetByIdFollowing:input_type -> users.DeleteFollowerReq
+	4,  // 14: users.UserService.GetUsers:output_type -> users.GetUserRes
+	2,  // 15: users.UserService.DeleteUsers:output_type -> users.Massage
+	5,  // 16: users.UserService.GetByIdUsers:output_type -> users.User
+	2,  // 17: users.UserService.AddFollower:output_type -> users.Massage
+	8,  // 18: users.UserService.GetFollowers:output_type -> users.GetaFollowersRes
+	2,  // 19: users.UserService.DeleteFollower:output_type -> users.Massage
+	14, // 20: users.UserService.GetByIdFollower:output_type -> users.Follow
+	2,  // 21: users.UserService.AddFollowing:output_type -> users.Massage
+	12, // 22: users.UserService.GetFollowing:output_type -> users.GetaFollowingRes
+	2,  // 23: users.UserService.DeleteFollowing:output_type -> users.Massage
+	14, // 24: users.UserService.GetByIdFollowing:output_type -> users.Follow
 	14, // [14:25] is the sub-list for method output_type
 	3,  // [3:14] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
@@ -1245,18 +1254,6 @@ func file_user_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_user_proto_msgTypes[0].Exporter = func(v any, i int) any {
-			switch v := v.(*DeleteFollowerReq); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_user_proto_msgTypes[1].Exporter = func(v any, i int) any {
 			switch v := v.(*Id); i {
 			case 0:
 				return &v.state
@@ -1268,8 +1265,8 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*Follow); i {
+		file_user_proto_msgTypes[1].Exporter = func(v any, i int) any {
+			switch v := v.(*DeleteFollowerReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1280,7 +1277,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[3].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[2].Exporter = func(v any, i int) any {
 			switch v := v.(*Massage); i {
 			case 0:
 				return &v.state
@@ -1292,7 +1289,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[4].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[3].Exporter = func(v any, i int) any {
 			switch v := v.(*GetUserReq); i {
 			case 0:
 				return &v.state
@@ -1304,7 +1301,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[5].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[4].Exporter = func(v any, i int) any {
 			switch v := v.(*GetUserRes); i {
 			case 0:
 				return &v.state
@@ -1316,7 +1313,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[6].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[5].Exporter = func(v any, i int) any {
 			switch v := v.(*User); i {
 			case 0:
 				return &v.state
@@ -1328,7 +1325,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[7].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[6].Exporter = func(v any, i int) any {
 			switch v := v.(*FollowerReq); i {
 			case 0:
 				return &v.state
@@ -1340,7 +1337,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[8].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[7].Exporter = func(v any, i int) any {
 			switch v := v.(*GetFollowersReq); i {
 			case 0:
 				return &v.state
@@ -1352,7 +1349,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[9].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[8].Exporter = func(v any, i int) any {
 			switch v := v.(*GetaFollowersRes); i {
 			case 0:
 				return &v.state
@@ -1364,7 +1361,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[10].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[9].Exporter = func(v any, i int) any {
 			switch v := v.(*Followers); i {
 			case 0:
 				return &v.state
@@ -1376,7 +1373,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[11].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[10].Exporter = func(v any, i int) any {
 			switch v := v.(*FollowingReq); i {
 			case 0:
 				return &v.state
@@ -1388,7 +1385,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[12].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[11].Exporter = func(v any, i int) any {
 			switch v := v.(*GetFollowingReq); i {
 			case 0:
 				return &v.state
@@ -1400,7 +1397,7 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[13].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[12].Exporter = func(v any, i int) any {
 			switch v := v.(*GetaFollowingRes); i {
 			case 0:
 				return &v.state
@@ -1412,8 +1409,20 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
-		file_user_proto_msgTypes[14].Exporter = func(v any, i int) any {
+		file_user_proto_msgTypes[13].Exporter = func(v any, i int) any {
 			switch v := v.(*Following); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_proto_msgTypes[14].Exporter = func(v any, i int) any {
+			switch v := v.(*Follow); i {
 			case 0:
 				return &v.state
 			case 1:
