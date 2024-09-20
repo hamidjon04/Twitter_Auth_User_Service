@@ -10,7 +10,7 @@ import (
 
 func TestRegister(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,7 +27,7 @@ func TestRegister(t *testing.T) {
 
 func TestGetUserByEmail(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func TestGetUserByEmail(t *testing.T) {
 
 func TestSaveRefreshToken(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestSaveRefreshToken(t *testing.T) {
 
 func TestResetPass(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestResetPass(t *testing.T) {
 
 func TestChangePass(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +94,7 @@ func TestChangePass(t *testing.T) {
 
 func TestInvalidateRefreshToken(t *testing.T) {
 	cfg := config.LoadConfig()
-	db, err := ConnectToDB(cfg)
+	db, err := Connect(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -111,7 +111,7 @@ func TestInvalidateRefreshToken(t *testing.T) {
 
 func TestIsRefreshTokenValid(t *testing.T) {
 	cfg := config.LoadConfig()
-    db, err := ConnectToDB(cfg)
+    db, err := Connect(cfg)
     if err != nil {
         t.Fatal(err)
     }

@@ -21,7 +21,7 @@ func main() {
 	logger := logs.InitLogger()
 	cfg := config.LoadConfig()
 
-	db, err := postgres.ConnectToDB(cfg)
+	db, err := postgres.Connect(cfg)
 	if err != nil {
 		log.Println(err)
 		logger.Error(err.Error())

@@ -22,7 +22,6 @@ const (
 	UserService_GetUsers_FullMethodName         = "/users.UserService/GetUsers"
 	UserService_DeleteUsers_FullMethodName      = "/users.UserService/DeleteUsers"
 	UserService_GetByIdUsers_FullMethodName     = "/users.UserService/GetByIdUsers"
-	UserService_AddFollower_FullMethodName      = "/users.UserService/AddFollower"
 	UserService_GetFollowers_FullMethodName     = "/users.UserService/GetFollowers"
 	UserService_DeleteFollower_FullMethodName   = "/users.UserService/DeleteFollower"
 	UserService_GetByIdFollower_FullMethodName  = "/users.UserService/GetByIdFollower"
@@ -39,7 +38,6 @@ type UserServiceClient interface {
 	GetUsers(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserRes, error)
 	DeleteUsers(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Massage, error)
 	GetByIdUsers(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
-	AddFollower(ctx context.Context, in *FollowerReq, opts ...grpc.CallOption) (*Massage, error)
 	GetFollowers(ctx context.Context, in *GetFollowersReq, opts ...grpc.CallOption) (*GetaFollowersRes, error)
 	DeleteFollower(ctx context.Context, in *DeleteFollowerReq, opts ...grpc.CallOption) (*Massage, error)
 	GetByIdFollower(ctx context.Context, in *DeleteFollowerReq, opts ...grpc.CallOption) (*Follow, error)
@@ -81,16 +79,6 @@ func (c *userServiceClient) GetByIdUsers(ctx context.Context, in *Id, opts ...gr
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(User)
 	err := c.cc.Invoke(ctx, UserService_GetByIdUsers_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) AddFollower(ctx context.Context, in *FollowerReq, opts ...grpc.CallOption) (*Massage, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Massage)
-	err := c.cc.Invoke(ctx, UserService_AddFollower_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +162,6 @@ type UserServiceServer interface {
 	GetUsers(context.Context, *GetUserReq) (*GetUserRes, error)
 	DeleteUsers(context.Context, *Id) (*Massage, error)
 	GetByIdUsers(context.Context, *Id) (*User, error)
-	AddFollower(context.Context, *FollowerReq) (*Massage, error)
 	GetFollowers(context.Context, *GetFollowersReq) (*GetaFollowersRes, error)
 	DeleteFollower(context.Context, *DeleteFollowerReq) (*Massage, error)
 	GetByIdFollower(context.Context, *DeleteFollowerReq) (*Follow, error)
@@ -197,9 +184,6 @@ func (UnimplementedUserServiceServer) DeleteUsers(context.Context, *Id) (*Massag
 }
 func (UnimplementedUserServiceServer) GetByIdUsers(context.Context, *Id) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByIdUsers not implemented")
-}
-func (UnimplementedUserServiceServer) AddFollower(context.Context, *FollowerReq) (*Massage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddFollower not implemented")
 }
 func (UnimplementedUserServiceServer) GetFollowers(context.Context, *GetFollowersReq) (*GetaFollowersRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowers not implemented")
@@ -285,24 +269,6 @@ func _UserService_GetByIdUsers_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).GetByIdUsers(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_AddFollower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FollowerReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).AddFollower(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_AddFollower_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).AddFollower(ctx, req.(*FollowerReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -451,10 +417,6 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetByIdUsers",
 			Handler:    _UserService_GetByIdUsers_Handler,
-		},
-		{
-			MethodName: "AddFollower",
-			Handler:    _UserService_AddFollower_Handler,
 		},
 		{
 			MethodName: "GetFollowers",

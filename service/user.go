@@ -12,7 +12,8 @@ type MainService interface {
 	GetUsers(context.Context, *pb.GetUserReq) (*pb.GetUserRes, error)
 	DeleteUsers(context.Context, *pb.Id) (*pb.Massage, error)
 	GetByIdUsers(context.Context, *pb.Id) (*pb.User, error)
-	Subscribe(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error)
+	
+	AddFollowing(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error)
 	GetFollowers(context.Context, *pb.GetFollowersReq) (*pb.GetaFollowersRes, error)
 	DeleteFollower(context.Context, *pb.DeleteFollowerReq) (*pb.Massage, error)
 	GetByIdFollower(context.Context, *pb.DeleteFollowerReq) (*pb.Follow, error)
@@ -93,7 +94,7 @@ func (s *Service) GetByIdFollower(ctx context.Context, req *pb.DeleteFollowerReq
 	return resp, nil
 }
 
-func (s *Service) Subscribe(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error) {
+func (s *Service) AddFollowing(ctx context.Context, req *pb.FollowingReq) (*pb.Massage, error) {
 	resp, err := s.Storage.FollowRepository().Subscribe(req)
 	if err != nil {
 		s.Logger.Error(fmt.Sprintf("Error following bo'lishda: %v", err))

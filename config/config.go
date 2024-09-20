@@ -32,8 +32,8 @@ func LoadConfig() Config {
 
 	config := Config{}
 
-	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":50050"))
-	config.USER_ROUTER = cast.ToString(coalesce("USER_ROUTER", ":1596"))
+	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":8081"))
+	config.USER_ROUTER = cast.ToString(coalesce("USER_ROUTER", ":8083"))
 	config.SIGNING_KEY = cast.ToString(coalesce("SIGNING_KEY", "secret"))
 
 	config.DB_HOST = cast.ToString(coalesce("DB_HOST", "localhost"))

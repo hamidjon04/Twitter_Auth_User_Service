@@ -35,7 +35,6 @@ func NewController(router *gin.Engine, logger *slog.Logger) Controller {
 // @securityDefinitions.apiKey ApiKeyAuth
 // @in header
 // @name Authorization
-// @BasePath /
 // @schemes http
 func (r *controllerImpl) StartRouter(cfg config.Config) error {
 	return r.Router.Run(cfg.USER_ROUTER)
@@ -46,23 +45,10 @@ func (r *controllerImpl) SetUpRouter(authS service.AuthenticateService, users se
 
 	r.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+
 	auth := r.Router.Group("/auth")
 	auth.POST("/register", h.Register)
 	auth.POST("/login", h.Login)
 	auth.POST("/logout", h.Logout)
 	auth.POST("/reset-password", h.ResetPassword)
-	
-
-	user := r.Router.Group("/user")
-	user.POST("/change-password", h.ChangePassword)
-	user.GET("/getUsers", h.GetUsers)
-	user.DELETE("/deleteUser/:id", h.DeleteUser)
-	user.GET("/getUser/:id", h.GetByIdUsers)
-	user.POST("/subscribe", h.Subscribe)
-	user.GET("/followers", h.GetFollowers)
-	user.DELETE("/deleteFollower/:id", h.DeleteFollower)
-	user.GET("getFollower/:id", h.GetByIdFollower)
-	user.GET("/following", h.GetFollowing)
-	user.DELETE("/deleteFollowing", h.DeleteFollowing)
-	user.GET("/getFollowing/:id", h.GetByIdFollowing)
 }

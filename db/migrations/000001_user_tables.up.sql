@@ -34,5 +34,5 @@ CREATE TABLE IF NOT EXISTS user_following(
 CREATE TABLE IF NOT EXISTS refresh_tokens(
 	user_id uuid PRIMARY KEY REFERENCES users(id),
 	token varchar UNIQUE NOT NULL,
-	expires_at timestamp NOT NULL
+	expires_at int NOT NULL
 );

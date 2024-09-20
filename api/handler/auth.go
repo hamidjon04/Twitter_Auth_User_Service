@@ -40,6 +40,7 @@ func (h *handlerImpl) Register(c *gin.Context) {
 			Error:   "Invalid email",
 			Message: "Kiritilgan email satri email emas",
 		})
+		return
 	}
 
 	hashpassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)

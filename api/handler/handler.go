@@ -12,18 +12,6 @@ type MainHandler interface {
 	Login(c *gin.Context)
 	Logout(c *gin.Context)
 	ResetPassword(c *gin.Context)
-
-	ChangePassword(c *gin.Context)
-	GetUsers(c *gin.Context)
-	DeleteUser(c *gin.Context)
-	GetByIdUsers(c *gin.Context)
-	Subscribe(c *gin.Context)
-	GetFollowers(c *gin.Context)
-	DeleteFollower(c *gin.Context)
-	GetByIdFollower(c *gin.Context)
-	GetFollowing(c *gin.Context)
-	DeleteFollowing(c *gin.Context)
-	GetByIdFollowing(c *gin.Context)
 }
 
 type handlerImpl struct {

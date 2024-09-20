@@ -29,7 +29,7 @@ func NewFollowRepository(db *sql.DB) FollowRepository {
 
 func (f *followRepo) DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, error) {
 	tr, err := f.DB.Begin()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (f *followRepo) DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, erro
 				WHERE 
 					user_id = $2 AND follower_id = $3 AND deleted_at is null`
 	_, err = tr.Exec(query, time.Now(), in.UserId, in.FollowerId)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return &pb.Massage{
@@ -52,7 +52,7 @@ func (f *followRepo) DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, erro
 				WHERE 
 					user_id = $2 AND following_id = $3 AND deleted_at is null`
 	_, err = tr.Exec(query, time.Now(), in.FollowerId, in.UserId)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return &pb.Massage{
@@ -67,11 +67,11 @@ func (f *followRepo) DeleteFollower(in *pb.DeleteFollowerReq) (*pb.Massage, erro
 
 func (f *followRepo) GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, error) {
 	tr, err := f.DB.Begin()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	
+
 	query := `
 				SELECT 
 					id
@@ -81,11 +81,11 @@ func (f *followRepo) GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, err
 					user_id = $1 AND follower_id = $2`
 	var id string
 	err = tr.QueryRow(query, in.UserId, in.FollowerId).Scan(&id)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return nil, err
-	} else if id == ""{
+	} else if id == "" {
 		log.Println("Followerlar orasida bunday follower mavjud emas")
 		tr.Rollback()
 		return nil, err
@@ -99,7 +99,7 @@ func (f *followRepo) GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, err
 					id = $1`
 	var resp = pb.Follow{Id: in.FollowerId}
 	err = tr.QueryRow(query, in.FollowerId).Scan(&resp.Username, &resp.Email, &resp.Name, &resp.Lastname, &resp.BirthDay, &resp.Image)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return nil, err
@@ -111,11 +111,11 @@ func (f *followRepo) GetByIdFollowers(in *pb.DeleteFollowerReq) (*pb.Follow, err
 func (f *followRepo) GetFollowers(in *pb.GetFollowersReq) (*pb.GetaFollowersRes, error) {
 	rows, err := f.DB.Query(`
         SELECT 
-    		id, user_id, follower_id,created_at, updated_at
+    		id, user_id, follower_id, created_at
         FROM 
             user_followers
         WHERE 
-            user_id = $1 AND deleted_at IS NULL limit $1 offset $2
+            user_id = $1 AND deleted_at IS NULL limit $2 offset $3
     `, in.Id, in.Limit, in.Page)
 
 	if err != nil {
@@ -183,7 +183,7 @@ func (f *followRepo) Subscribe(in *pb.FollowingReq) (*pb.Massage, error) {
 
 func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, error) {
 	tr, err := f.DB.Begin()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -193,7 +193,7 @@ func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, err
 				WHERE 
 					user_id = $2 AND follower_id = $3 AND deleted_at is null`
 	_, err = tr.Exec(query, time.Now(), in.FollowerId, in.UserId)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return &pb.Massage{
@@ -206,7 +206,7 @@ func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, err
 				WHERE 
 					user_id = $2 AND following_id = $3 AND deleted_at is null`
 	_, err = tr.Exec(query, time.Now(), in.UserId, in.FollowerId)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return &pb.Massage{
@@ -221,11 +221,11 @@ func (f *followRepo) DeleteFollowing(in *pb.DeleteFollowerReq) (*pb.Massage, err
 
 func (f *followRepo) GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, error) {
 	tr, err := f.DB.Begin()
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	
+
 	query := `
 				SELECT 
 					id
@@ -235,11 +235,11 @@ func (f *followRepo) GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, err
 					user_id = $1 AND following_id = $2`
 	var id string
 	err = tr.QueryRow(query, in.UserId, in.FollowerId).Scan(&id)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return nil, err
-	} else if id == ""{
+	} else if id == "" {
 		log.Println("Followerlar orasida bunday follower mavjud emas")
 		tr.Rollback()
 		return nil, err
@@ -253,7 +253,7 @@ func (f *followRepo) GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, err
 					id = $1`
 	var resp = pb.Follow{Id: in.FollowerId}
 	err = tr.QueryRow(query, in.FollowerId).Scan(&resp.Username, &resp.Email, &resp.Name, &resp.Lastname, &resp.BirthDay, &resp.Image)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 		tr.Rollback()
 		return nil, err
@@ -265,24 +265,22 @@ func (f *followRepo) GetByIdFollowing(in *pb.DeleteFollowerReq) (*pb.Follow, err
 func (f *followRepo) GetFollowing(in *pb.GetFollowingReq) (*pb.GetaFollowingRes, error) {
 	rows, err := f.DB.Query(`
         SELECT 
-    		id, user_id, follower_id, created_at, updated_at
+    		id, user_id, follower_id, created_at
         FROM 
             user_following
         WHERE 
-            user_id = $1 AND deleted_at IS NULL limit $1 offset $2
+            user_id = $1 AND deleted_at IS NULL limit $2 offset $3
     `, in.Id, in.Limit, in.Page)
 
 	if err != nil {
 		return nil, err
 	}
 
-	defer rows.Close()
-
 	var followings []*pb.Following
 
 	for rows.Next() {
 		var following pb.Following
-		err := rows.Scan(&following.Id, &following.UserId, &following.FollowingId, &following.CreatedAt, &following.UpdatedAt)
+		err := rows.Scan(&following.Id, &following.UserId, &following.FollowingId, &following.CreatedAt)
 
 		if err != nil {
 			return nil, err
@@ -291,5 +289,8 @@ func (f *followRepo) GetFollowing(in *pb.GetFollowingReq) (*pb.GetaFollowingRes,
 		followings = append(followings, &following)
 	}
 
-	return &pb.GetaFollowingRes{Following: followings}, nil
+	return &pb.GetaFollowingRes{
+		Following: followings,
+		Limit:     in.Limit,
+		Page:      in.Page}, nil
 }

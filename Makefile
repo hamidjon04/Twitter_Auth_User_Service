@@ -1,28 +1,49 @@
-include .env
-export $(shell sed 's/=.*//' .env)
-
 CURRENT_DIR := $(shell pwd)
-DB_URL := postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
+DATABASE_URL="postgres://postgres:hamidjon4424@localhost:5432/twitter?sslmode=disable"
 
-MIGRATE_PATH := database/migrations
-MIGRATE_CMD := migrate -path $(MIGRATE_PATH) -database '$(DB_URL)' -verbose
-
-.PHONY: gen-proto mig-up mig-down mig-force mig-create
+run:
+	@go run cmd/main.go
 
 gen-proto:
-	./scripts/gen-proto.sh $(CURRENT_DIR)
+	@./scripts/gen-proto.sh $(CURRENT_DIR)
 
-mig-up: 
-	$(MIGRATE_CMD) up
+tidy:
+	@go mod tidy
+mig-create:
+	@if [ -z "$(name)" ]; then \
+	read -p "Enter migration name: " name; \
+	fi; \
+	migrate create -ext sql -dir db/migrations -seq $$name
+
+mig-up:
+	@migrate -database "$(DATABASE_URL)" -path db/migrations up
 
 mig-down:
-	$(MIGRATE_CMD) down
+	@migrate -database "$(DATABASE_URL)" -path db/migrations down
 
 mig-force:
-	$(MIGRATE_CMD) force 1
+	@if [ -z "$(version)" ]; then \
+	read -p "Enter migration version: " version; \
+	fi; \
+	migrate -database "$(DATABASE_URL)" -path db/migrations force $$version
 
-mig-create:
-	migrate create -ext sql -dir $(MIGRATE_PATH) -seq user_tables
+permission:
+	@chmod +x scripts/gen-proto.sh
+
+test:
+	@go test ./storage/postgres
 
 swag-gen:
 	~/go/bin/swag init -g ./api/router.go -o api/docs
+
+swag-fix:
+	go get -u github.com/swaggo/swag/cmd/swag
+
+docker-build:
+	sudo docker build .
+
+docker-images:
+	sudo docker images
+
+swag-change: 
+	go get -u github.com/swaggo/swag

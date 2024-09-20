@@ -1,0 +1,31 @@
+{"time":"2024-09-17T17:31:09.7317225+05:00","level":"ERROR","msg":"dial tcp: lookup postgres on 127.0.0.53:53: server misbehaving"}
+{"time":"2024-09-17T17:35:17.668502159+05:00","level":"ERROR","msg":"dial tcp: lookup postgres on 127.0.0.53:53: server misbehaving"}
+{"time":"2024-09-18T13:40:18.67721915+05:00","level":"ERROR","msg":"dial tcp: lookup postgres on 127.0.0.53:53: server misbehaving"}
+{"time":"2024-09-18T14:16:53.611979442+05:00","level":"ERROR","msg":"pq: password authentication failed for user \"postgres\""}
+{"time":"2024-09-18T14:46:50.719290566+05:00","level":"ERROR","msg":"Error in user register: pq: relation \"users\" does not exist"}
+{"time":"2024-09-18T14:46:50.719332262+05:00","level":"ERROR","msg":"Register request error: pq: relation \"users\" does not exist"}
+{"time":"2024-09-18T14:55:19.208793491+05:00","level":"ERROR","msg":"Error on token save for user: pq: date/time field value out of range: \"1726739719\""}
+{"time":"2024-09-18T14:55:19.208822097+05:00","level":"ERROR","msg":"Refresh token databazaga saqlanmadi: pq: date/time field value out of range: \"1726739719\""}
+{"time":"2024-09-18T14:57:18.019467551+05:00","level":"ERROR","msg":"Error in user register: pq: relation \"users\" does not exist"}
+{"time":"2024-09-18T14:57:18.019502604+05:00","level":"ERROR","msg":"Register request error: pq: relation \"users\" does not exist"}
+{"time":"2024-09-18T15:10:08.122451988+05:00","level":"ERROR","msg":"Invalid email: Kiritilgan email satri, email emas"}
+{"time":"2024-09-18T15:12:12.730116961+05:00","level":"ERROR","msg":"Invalid email: Kiritilgan email satri, email emas"}
+{"time":"2024-09-18T15:13:14.254953052+05:00","level":"ERROR","msg":"Datavazadan ma'lumotlani olishda xatolik: sql: no rows in result set"}
+{"time":"2024-09-18T15:13:14.254975352+05:00","level":"ERROR","msg":"Bunday user mavjud emas, invalid email: sql: no rows in result set"}
+{"time":"2024-09-19T08:40:47.416995905+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T08:59:22.515837689+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:00:33.687642745+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:07:29.313551088+05:00","level":"ERROR","msg":"Error on get followers: pq: column \"updated_at\" does not exist"}
+{"time":"2024-09-19T09:18:24.642770051+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:20:21.462564548+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: relation \"user_id\" does not exist"}
+{"time":"2024-09-19T09:30:38.919130766+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: relation \"user_id\" does not exist"}
+{"time":"2024-09-19T09:32:32.777182704+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:32:37.18032959+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:32:52.243609586+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:40.461315362+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:41.906094081+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:42.049658301+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:42.177669373+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:42.316149375+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:42.446581587+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}
+{"time":"2024-09-19T09:33:42.632903284+05:00","level":"ERROR","msg":"Error userni following bo'lganlarini olishda: pq: column \"follower_id\" does not exist"}

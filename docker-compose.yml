@@ -1,0 +1,59 @@
+services:
+  postgres-db:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: twitter
+      POSTGRES_PORT: 5433
+      PG_DATA: /var/lib/postgresql/data 
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - twitter
+
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - twitter
+
+
+  migrate:
+    image: migrate/migrate
+    networks:
+      - twitter
+    volumes:
+      - ./migrations:/migrations
+    command: ["-path", "/migrations", "-database" ,"postgres://postgres:1111@postgres:5433/twitter?sslmode=disable","up"]
+    depends_on:
+      - postgres-db
+
+
+
+  user-service:
+    build: .
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres-db
+      - redis
+    networks:
+      - twitter
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  twitter:
+    external: true

@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	TwitServiceClient_CreateTwit_FullMethodName      = "/twit.TwitServiceClient/CreateTwit"
-	TwitServiceClient_UpadateTwit_FullMethodName     = "/twit.TwitServiceClient/UpadateTwit"
+	TwitServiceClient_UpdateTwit_FullMethodName      = "/twit.TwitServiceClient/UpdateTwit"
 	TwitServiceClient_DeleteTwit_FullMethodName      = "/twit.TwitServiceClient/DeleteTwit"
 	TwitServiceClient_GetTwits_FullMethodName        = "/twit.TwitServiceClient/GetTwits"
 	TwitServiceClient_AddLike_FullMethodName         = "/twit.TwitServiceClient/AddLike"
@@ -36,8 +36,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TwitServiceClientClient interface {
 	CreateTwit(ctx context.Context, in *CreateTwitReq, opts ...grpc.CallOption) (*CreateTwitResp, error)
-	UpadateTwit(ctx context.Context, in *UpadateReq, opts ...grpc.CallOption) (*UpdateTwitResp, error)
-	DeleteTwit(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Message, error)
+	UpdateTwit(ctx context.Context, in *UpdateReq, opts ...grpc.CallOption) (*UpdateTwitResp, error)
+	DeleteTwit(ctx context.Context, in *DeleteTwitReq, opts ...grpc.CallOption) (*Message, error)
 	GetTwits(ctx context.Context, in *GetTwitsReq, opts ...grpc.CallOption) (*GetTwitsResp, error)
 	AddLike(ctx context.Context, in *AddLikeReq, opts ...grpc.CallOption) (*AddLikeResp, error)
 	RemoveLike(ctx context.Context, in *DeleleLikeReq, opts ...grpc.CallOption) (*Message, error)
@@ -65,17 +65,17 @@ func (c *twitServiceClientClient) CreateTwit(ctx context.Context, in *CreateTwit
 	return out, nil
 }
 
-func (c *twitServiceClientClient) UpadateTwit(ctx context.Context, in *UpadateReq, opts ...grpc.CallOption) (*UpdateTwitResp, error) {
+func (c *twitServiceClientClient) UpdateTwit(ctx context.Context, in *UpdateReq, opts ...grpc.CallOption) (*UpdateTwitResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateTwitResp)
-	err := c.cc.Invoke(ctx, TwitServiceClient_UpadateTwit_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, TwitServiceClient_UpdateTwit_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *twitServiceClientClient) DeleteTwit(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Message, error) {
+func (c *twitServiceClientClient) DeleteTwit(ctx context.Context, in *DeleteTwitReq, opts ...grpc.CallOption) (*Message, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Message)
 	err := c.cc.Invoke(ctx, TwitServiceClient_DeleteTwit_FullMethodName, in, out, cOpts...)
@@ -160,8 +160,8 @@ func (c *twitServiceClientClient) GetFollowerTwit(ctx context.Context, in *GetTw
 // for forward compatibility
 type TwitServiceClientServer interface {
 	CreateTwit(context.Context, *CreateTwitReq) (*CreateTwitResp, error)
-	UpadateTwit(context.Context, *UpadateReq) (*UpdateTwitResp, error)
-	DeleteTwit(context.Context, *Id) (*Message, error)
+	UpdateTwit(context.Context, *UpdateReq) (*UpdateTwitResp, error)
+	DeleteTwit(context.Context, *DeleteTwitReq) (*Message, error)
 	GetTwits(context.Context, *GetTwitsReq) (*GetTwitsResp, error)
 	AddLike(context.Context, *AddLikeReq) (*AddLikeResp, error)
 	RemoveLike(context.Context, *DeleleLikeReq) (*Message, error)
@@ -179,10 +179,10 @@ type UnimplementedTwitServiceClientServer struct {
 func (UnimplementedTwitServiceClientServer) CreateTwit(context.Context, *CreateTwitReq) (*CreateTwitResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTwit not implemented")
 }
-func (UnimplementedTwitServiceClientServer) UpadateTwit(context.Context, *UpadateReq) (*UpdateTwitResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpadateTwit not implemented")
+func (UnimplementedTwitServiceClientServer) UpdateTwit(context.Context, *UpdateReq) (*UpdateTwitResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTwit not implemented")
 }
-func (UnimplementedTwitServiceClientServer) DeleteTwit(context.Context, *Id) (*Message, error) {
+func (UnimplementedTwitServiceClientServer) DeleteTwit(context.Context, *DeleteTwitReq) (*Message, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTwit not implemented")
 }
 func (UnimplementedTwitServiceClientServer) GetTwits(context.Context, *GetTwitsReq) (*GetTwitsResp, error) {
@@ -237,26 +237,26 @@ func _TwitServiceClient_CreateTwit_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TwitServiceClient_UpadateTwit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpadateReq)
+func _TwitServiceClient_UpdateTwit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TwitServiceClientServer).UpadateTwit(ctx, in)
+		return srv.(TwitServiceClientServer).UpdateTwit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TwitServiceClient_UpadateTwit_FullMethodName,
+		FullMethod: TwitServiceClient_UpdateTwit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TwitServiceClientServer).UpadateTwit(ctx, req.(*UpadateReq))
+		return srv.(TwitServiceClientServer).UpdateTwit(ctx, req.(*UpdateReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _TwitServiceClient_DeleteTwit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(DeleteTwitReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -268,7 +268,7 @@ func _TwitServiceClient_DeleteTwit_Handler(srv interface{}, ctx context.Context,
 		FullMethod: TwitServiceClient_DeleteTwit_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TwitServiceClientServer).DeleteTwit(ctx, req.(*Id))
+		return srv.(TwitServiceClientServer).DeleteTwit(ctx, req.(*DeleteTwitReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -411,8 +411,8 @@ var TwitServiceClient_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TwitServiceClient_CreateTwit_Handler,
 		},
 		{
-			MethodName: "UpadateTwit",
-			Handler:    _TwitServiceClient_UpadateTwit_Handler,
+			MethodName: "UpdateTwit",
+			Handler:    _TwitServiceClient_UpdateTwit_Handler,
 		},
 		{
 			MethodName: "DeleteTwit",
